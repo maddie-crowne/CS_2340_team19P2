@@ -1,1 +1,35 @@
+{% load static %}
+
+{#<script src="{% static 'auth/js/logout.js' %}"></script>#}
+
 <h1>Select Wrapped Timeframe</h1>
+<div class="account-logout">
+    <a href="{% url 'wrapped:accountInfo' %}">My Account</a>
+    <button id="logout-button" onclick="logout()">Logout</button>
+</div>
+<div class="account-info">
+    <a href="{% url 'wrapped:accountInfo' %}"></a>
+</div>
+
+<script>
+    function logout() {
+        fetch("{% url 'auth:logout' %}", {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}' // Add this line
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "{% url 'auth:user_login' %}";
+                } else {
+                    alert('Logout failed. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Logout failed. Please try again.');
+            });
+    }
+</script>
