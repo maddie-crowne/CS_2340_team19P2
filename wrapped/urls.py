@@ -8,5 +8,5 @@ urlpatterns = [
     path('', views.wrapped, name='wrapped'),
     path('duo', views.duo, name='duo'),
     path('invite', views.invite, name='invite'),
-    path('account', views.account, name='account'),
+    path('account', views.account, name='accountInfo'),
 ]

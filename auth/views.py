@@ -23,7 +23,6 @@ def register(request):
 
 # Login view
 def user_login(request):
-    print("Login view accessed")
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -38,4 +37,13 @@ def user_login(request):
 # Logout view
 def user_logout(request):
     logout(request)
-    return redirect('auth:login')  # Redirect to login page after logout
+    return redirect('auth:user_login')  # Redirect to login page after logout
+
+def delete_account(request):
+    if request.method == 'POST':
+        # Delete the user account
+        request.user.delete()
+        messages.success(request, "Your account has been deleted successfully.")
+        return redirect('auth:user_login')  # Redirect to a home or login page
+
+    return render(request, 'accountInfo.html')  # Or redirect to the account info page

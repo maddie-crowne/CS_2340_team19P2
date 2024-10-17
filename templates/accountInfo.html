@@ -1,1 +1,22 @@
 <h1>Account Info & Saved Wraps</h1>
+
+<div class="account-details">
+    <h1>Account Details</h1>
+    {#    <img src="{% static 'images/account.png' %}" alt="logo" class="account-avatar">#}
+    
+    <div class="name">
+        <p><span class="info-label"></span> {{ user.first_name }} {{ user.last_name }}</p>
+    </div>
+    
+    <div class="account-info">
+        <p><span class="info-label">Username:</span> {{ user.username }}</p>
+        <p><span class="info-label">Email:</span> {{ user.email }}</p>
+    </div>
+    
+    <!-- Delete Account Form -->
+    <form action="{% url 'auth:delete_account' %}" method="POST"
+          onsubmit="return confirm('Are you sure you want to delete your account?');">
+        {% csrf_token %}
+        <button type="submit" class="delete-account-button">Delete Account</button>
+    </form>
+</div>
