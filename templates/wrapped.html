@@ -1,1 +1,19 @@
 <h1>Wrapped</h1>
+<a href="{% url 'spotify_login' %}">Log in with Spotify</a>
+<body>
+    <h1>Welcome, {{ user_data.display_name }}!</h1>
+        <p>Email: {{ user_data.email }}</p>
+        <p>Spotify ID: {{ user_data.id }}</p>
+        <p>Country: {{ user_data.country }}</p>
+        <img src="{{ user_data.images.0.url }}" alt="Profile Picture" />
+        <h1>Top Artists</h1>
+            <ul>
+                {% if top_artists %}
+                    {% for artist in top_artists.items %}
+                        <li>{{ artist.name }}</li>
+                    {% endfor %}
+                {% else %}
+                    <p>No top artists available.</p>
+                {% endif %}
+            </ul>
+</body>

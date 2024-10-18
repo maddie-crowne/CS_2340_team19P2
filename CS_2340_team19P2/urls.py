@@ -19,11 +19,16 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 
 from . import views
+from .views import spotify_login, spotify_callback
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/auth/login/', permanent=False)),
     path('auth/', include('auth.urls')),
-    path('wrapped/', include('wrapped.urls')),
+    path('wrapped/', views.wrapped, name='wrapped'),
+    path('wrapped', include('wrapped.urls')),
     path('contactTheDevelopers', views.contactDevelopers, name='contactDevelopers'),
+    path('spotify/login/', spotify_login, name='spotify_login'),  # Ensure this matches the login URL
+    path('spotify/callback/', spotify_callback, name='spotify_callback'),
+    path('account/', views.account, name='account')
 ]
