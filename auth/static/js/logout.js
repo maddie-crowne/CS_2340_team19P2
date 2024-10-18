@@ -1,3 +1,10 @@
+/**
+ * Logs the user out by sending a POST request to the logout URL.
+ *
+ * This function performs a fetch request to the server to log the user out.
+ * Upon a successful response, it redirects the user to the login page.
+ * If the logout request fails, an alert is displayed to the user.
+ */
 function logout() {
     fetch("{% url 'auth:logout' %}", {
         method: 'POST',
