@@ -59,22 +59,22 @@ def spotify_callback(request):
 
 # View user account info with Spotify data
 def account(request):
-    access_token = request.session.get('access_token')
-
-    if not access_token:
-        return redirect('spotify_login')
-
-    user_profile_url = "https://api.spotify.com/v1/me"
-    headers = {"Authorization": f"Bearer {access_token}"}
-
-    response = requests.get(user_profile_url, headers=headers)
-
-    if response.status_code != 200:
-        return JsonResponse({'error': 'Failed to fetch user data'}, status=response.status_code)
-
-    user_data = response.json()
-
-    return render(request, 'accountInfo.html', {'user': user_data})
+    # access_token = request.session.get('access_token')
+    # if not access_token:
+    #     return redirect('spotify_login')
+    #
+    # user_profile_url = "https://api.spotify.com/v1/me"
+    # headers = {"Authorization": f"Bearer {access_token}"}
+    #
+    # response = requests.get(user_profile_url, headers=headers)
+    #
+    # if response.status_code != 200:
+    #     return JsonResponse({'error': 'Failed to fetch user data'}, status=response.status_code)
+    #
+    # user_data = response.json()
+    #
+    # return render(request, 'accountInfo.html', {'user': user_data})
+    return render(request, 'accountInfo.html')
 
 def get_spotify_token(auth_code):
     token_url = "https://accounts.spotify.com/api/token"
