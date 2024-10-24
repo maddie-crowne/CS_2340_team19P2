@@ -21,35 +21,8 @@ def spotify_login(request):
         "&show_dialog=true"  # Add this to force reauthorization
     )
     return redirect(auth_url)
-# Handle Spotify callback after user authorizes
-def spotify_callback(request):
-    code = request.GET.get('code')
-    token_url = "https://accounts.spotify.com/api/token"
 
-    response = requests.post(token_url,
-        data={
-            "grant_type": "authorization_code",
-            "code": code,
-            "redirect_uri": settings.SPOTIFY_REDIRECT_URI,
-            "client_id": settings.SPOTIFY_CLIENT_ID,
-            "client_secret": settings.SPOTIFY_CLIENT_SECRET
-        },
-        headers={
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    )
 
-    token_data = response.json()
-    access_token = token_data.get('access_token')
-    refresh_token = token_data.get('refresh_token')
-
-    # Check if access token is successfully obtained
-    print("Access Token:", access_token)
-
-    request.session['access_token'] = access_token
-    request.session['refresh_token'] = refresh_token
-
-    return JsonResponse({'access_token': access_token, 'refresh_token': refresh_token})
 # View user account info with Spotify data
 def account(request):
     access_token = request.session.get('access_token')
@@ -141,6 +114,7 @@ def select(request):
     return render(request, 'wrappedSelect.html', {
 
     })
+
 @login_required
 def invite(request):
     return render(request, 'wrappedInvite.html', {
@@ -162,16 +136,25 @@ def wrapped(request):
 
     user_data = get_spotify_user_info(access_token)
     top_artists_data = get_spotify_top_artists(access_token)
+    top_tracks_data = get_spotify_top_tracks(access_token)
 
     if top_artists_data is None:
         print("Top artists data is not available.")
     else:
         print("Top artists retrieved successfully.")
 
+    if top_tracks_data is None:
+        print("Top tracks data is not available.")
+    else:
+        print("Top tracks retrieved successfully.")
+
     return render(request, 'wrapped.html', {
         'user_data': user_data,
-        'top_artists': top_artists_data  # Pass top artists to the template
+        'top_artists': top_artists_data,
+        'top_tracks': top_tracks_data  # Pass top tracks to the template
     })
+
+
 def spotify_callback(request):
     code = request.GET.get('code')
 
@@ -205,6 +188,21 @@ def spotify_callback(request):
     else:
         # Handle the case where the code is missing
         return render(request, 'error.html', {"message": "Failed to authenticate with Spotify"})
+
+def get_spotify_top_tracks(access_token):
+    url = "https://api.spotify.com/v1/me/top/tracks"
+    headers = {"Authorization": f"Bearer {access_token}"}
+    params = {
+        "limit": 10  # Specify how many top tracks you want to retrieve
+    }
+
+    response = requests.get(url, headers=headers, params=params)
+
+    if response.status_code != 200:
+        return None
+
+    return response.json()
+
 @login_required
 def contactDevelopers(request):
     """

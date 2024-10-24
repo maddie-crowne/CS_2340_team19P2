@@ -1,3 +1,8 @@
+/**
+ * Logs the user out by sending a POST request to the logout endpoint.
+ * On successful logout, the user is redirected to the homepage.
+ * If the logout fails, an error is logged to the console.
+ */
 function logout() {
     const logoutUrl = '/auth/logout/'; // Adjust if needed
     fetch(logoutUrl, {
@@ -19,6 +24,12 @@ function logout() {
     });
 }
 
+/**
+ * Retrieves the value of a specified cookie by name.
+ *
+ * @param {string} name - The name of the cookie to retrieve.
+ * @returns {string|null} The value of the cookie, or null if not found.
+ */
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
