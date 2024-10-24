@@ -1,29 +1,37 @@
+{% load static %}
+<script src='{% static 'playClips.js' %}'></script>
 <h1>Wrapped</h1>
 <a href="{% url 'spotify_login' %}">Log in with Spotify</a>
-<body>
-    <h1>Welcome, {{ user_data.display_name }}!</h1>
-        <p>Email: {{ user_data.email }}</p>
-        <p>Spotify ID: {{ user_data.id }}</p>
-        <p>Country: {{ user_data.country }}</p>
-        <img src="{{ user_data.images.0.url }}" alt="Profile Picture" />
-        <h1>Top Artists</h1>
-            <ul>
-                {% if top_artists %}
-                    {% for artist in top_artists.items %}
-                        <li>{{ artist.name }}</li>
-                    {% endfor %}
-                {% else %}
-                    <p>No top artists available.</p>
-                {% endif %}
-            </ul>
-    <h1>Top Tracks</h1>
-            <ul>
-                {% if top_tracks %}
-                    {% for track in top_tracks.items %}
-                        <li>{{ track.name }}</li>
-                    {% endfor %}
-                {% else %}
-                    <p>No top tracks available.</p>
-                {% endif %}
-            </ul>
-</body>
+<h1>Welcome, {{ user_data.display_name }}!</h1>
+<p>Email: {{ user_data.email }}</p>
+<p>Spotify ID: {{ user_data.id }}</p>
+<p>Country: {{ user_data.country }}</p>
+<img src="{{ user_data.images.0.url }}" alt="Profile Picture"/>
+<h1>Top Artists</h1>
+<ul>
+    {% if top_artists %}
+        {% for artist in top_artists.items %}
+            <li>{{ artist.name }}</li>
+        {% endfor %}
+    {% else %}
+        <p>No top artists available.</p>
+    {% endif %}
+</ul>
+<h2>Your Top Tracks</h2>
+<ul id="track-list">
+    {% for track in top_tracks.items %}
+        <li>
+            {{ track.name }} by
+            {% if track.artists %}
+                {{ track.artists.0.name }}
+            {% else %}
+                Unknown Artist
+            {% endif %}
+            <audio class="track-audio">
+                <source src="{{ track.preview_url }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </li>
+    {% endfor %}
+</ul>
+<button id="play-tracks">Play Top Tracks</button>
