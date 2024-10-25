@@ -130,7 +130,7 @@ def get_spotify_top_genres(access_token):
 
     for artist in artists:
         genres = artist.get('genres', [])
-        all_genres.extend(genres)
+        all_genres.extend([genre.title() for genre in genres])
 
     genre_counts = Counter(all_genres)
 
