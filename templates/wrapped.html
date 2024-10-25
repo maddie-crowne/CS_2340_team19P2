@@ -34,4 +34,15 @@
         </li>
     {% endfor %}
 </ul>
+
+<h1>Top Genres</h1>
+<ul>
+    {% if top_genres %}
+        {% for genre in top_genres %}
+            <li>{{ genre }}</li>
+        {% endfor %}
+    {% else %}
+        <p>No top genres available.</p>
+    {% endif %}
+</ul>
 <button id="play-tracks">Play Top Tracks</button>

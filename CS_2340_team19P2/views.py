@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.conf import settings
 from django.shortcuts import redirect
+from collections import Counter
 
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
@@ -77,11 +78,11 @@ def get_spotify_user_info(access_token):
     response = requests.get(f"{SPOTIFY_API_URL}", headers=headers)
     return response.json()
 
-def get_spotify_top_artists(access_token):
+def get_spotify_top_artists(access_token, limit):
     url = "https://api.spotify.com/v1/me/top/artists"
     headers = {"Authorization": f"Bearer {access_token}"}
     params = {
-        "limit": 10  # You can specify how many top artists you want to retrieve
+        "limit": limit # You can specify how many top artists you want to retrieve
     }
 
     response = requests.get(url, headers=headers, params=params)
@@ -112,6 +113,33 @@ def get_spotify_top_tracks(access_token):
         return None
 
     return response.json()
+
+
+def get_spotify_top_genres(access_token):
+    artists = get_spotify_top_artists(access_token, 50).get("items", [])
+
+    if artists is None:
+        print("Failed to fetch top tracks. The returned value is None.")
+        return []
+
+    if not artists:
+        print("No top tracks found.")
+        return []
+
+    all_genres = []
+
+    for artist in artists:
+        genres = artist.get('genres', [])
+        all_genres.extend(genres)
+
+    genre_counts = Counter(all_genres)
+
+    sorted_genres = genre_counts.most_common()[0:10]
+    genre_list = []
+    for genre, count in sorted_genres:
+        genre_list.append(genre)
+    return genre_list
+
 
 def get_spotify_token(auth_code):
     token_url = "https://accounts.spotify.com/api/token"
@@ -179,8 +207,9 @@ def wrapped(request):
         return redirect('spotify_login')
 
     user_data = get_spotify_user_info(access_token)
-    top_artists_data = get_spotify_top_artists(access_token)
+    top_artists_data = get_spotify_top_artists(access_token, 10)
     top_tracks_data = get_spotify_top_tracks(access_token)
+    top_genres_data = get_spotify_top_genres(access_token)
 
     if top_artists_data is None:
         print("Top artists data is not available.")
@@ -190,11 +219,16 @@ def wrapped(request):
         print("Top artists data is not available.")
     else:
         print("Top artists retrieved successfully.")
+    if len(top_genres_data) == 0:
+        print("Top genres data is not available.")
+    else:
+        print("Top genres retrieved successfully.")
 
     return render(request, 'wrapped.html', {
         'user_data': user_data,
         'top_artists': top_artists_data,
-        'top_tracks': top_tracks_data # Pass top artists to the template
+        'top_tracks': top_tracks_data,
+        'top_genres': top_genres_data # Pass top artists to the template
     })
 def spotify_callback(request):
     code = request.GET.get('code')
