@@ -1,13 +1,22 @@
 {% load static %}
 <script src='{% static 'playClips.js' %}'></script>
+
 <h1>Wrapped</h1>
-<a href="{% url 'spotify_login' %}">Log in with Spotify</a>
-<h1>Welcome, {{ user_data.display_name }}!</h1>
-<p>Email: {{ user_data.email }}</p>
-<p>Spotify ID: {{ user_data.id }}</p>
-<p>Country: {{ user_data.country }}</p>
-<img src="{{ user_data.images.0.url }}" alt="Profile Picture"/>
-<h1>Top Artists</h1>
+<h2>Welcome, {{ user_data.display_name }}!</h2>
+
+{% if selected_time_range == 'short_term' %}
+    <h2>This is your Wrapped for the past month.</h2>
+{% elif selected_time_range == 'medium_term' %}
+    <h2>This is your Wrapped for the past 6 months.</h2>
+{% elif selected_time_range == 'long_term' %}
+    <h2>This is your Wrapped for the past year.</h2>
+{% endif %}
+
+{#<p>Email: {{ user_data.email }}</p>#}
+{#<p>Spotify ID: {{ user_data.id }}</p>#}
+{#<p>Country: {{ user_data.country }}</p>#}
+{#<img src="{{ user_data.images.0.url }}" alt="Profile Picture"/>#}
+<h3>Top Artists</h3>
 <ul>
     {% if top_artists %}
         {% for artist in top_artists.items %}
@@ -17,7 +26,7 @@
         <p>No top artists available.</p>
     {% endif %}
 </ul>
-<h2>Your Top Tracks</h2>
+<h3>Your Top Tracks</h3>
 <ul id="track-list">
     {% for track in top_tracks.items %}
         <li>
@@ -35,7 +44,7 @@
     {% endfor %}
 </ul>
 
-<h1>Top Genres</h1>
+<h3>Top Genres</h3>
 <ul>
     {% if top_genres %}
         {% for genre in top_genres %}

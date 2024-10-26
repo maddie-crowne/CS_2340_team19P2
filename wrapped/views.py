@@ -13,6 +13,28 @@ SPOTIFY_API_URL = "https://api.spotify.com/v1/me"
 def user_spotify_login(request):
     return render(request, 'loginWithSpotify.html', {})
 
+@login_required
+def wrapped(request):
+    access_token = request.session.get('spotify_access_token')
+
+    if not access_token:
+        return redirect('spotify_login')
+
+    time_range = request.GET.get('time_range', 'medium_term')
+
+    user_data = get_spotify_user_info(access_token)
+    top_artists_data = get_spotify_top_artists(access_token, 5, time_range)
+    top_tracks_data = get_spotify_top_tracks(access_token , time_range)
+    top_genres_data = get_spotify_top_genres(access_token , time_range)
+
+    return render(request, 'wrapped.html', {
+        'user_data': user_data,
+        'top_artists': top_artists_data,
+        'top_tracks': top_tracks_data,
+        'top_genres': top_genres_data, # Pass top artists to the template
+        'selected_time_range': time_range
+    })
+
 def get_spotify_user_info(access_token):
     headers = {
         'Authorization': f'Bearer {access_token}',
@@ -21,11 +43,12 @@ def get_spotify_user_info(access_token):
     response = requests.get(f"{SPOTIFY_API_URL}", headers=headers)
     return response.json()
 
-def get_spotify_top_artists(access_token, limit):
+def get_spotify_top_artists(access_token, limit, time_range):
     url = "https://api.spotify.com/v1/me/top/artists"
     headers = {"Authorization": f"Bearer {access_token}"}
     params = {
-        "limit": limit
+        "limit": limit,
+        "time_range": time_range
     }
 
     response = requests.get(url, headers=headers, params=params)
@@ -35,11 +58,12 @@ def get_spotify_top_artists(access_token, limit):
 
     return response.json()
 
-def get_spotify_top_tracks(access_token):
+def get_spotify_top_tracks(access_token, time_range):
     url = "https://api.spotify.com/v1/me/top/tracks"
     headers = {"Authorization": f"Bearer {access_token}"}
     params = {
-        "limit": 5
+        "limit": 5,
+        "time_range": time_range
     }
 
     response = requests.get(url, headers=headers, params=params)
@@ -50,8 +74,8 @@ def get_spotify_top_tracks(access_token):
     return response.json()
 
 
-def get_spotify_top_genres(access_token):
-    artists = get_spotify_top_artists(access_token, 50).get("items", [])
+def get_spotify_top_genres(access_token, time_range):
+    artists = get_spotify_top_artists(access_token, 50, time_range).get("items", [])
 
     if artists is None:
         print("Failed to fetch top tracks. The returned value is None.")
@@ -74,25 +98,6 @@ def get_spotify_top_genres(access_token):
     for genre, count in sorted_genres:
         genre_list.append(genre)
     return genre_list
-
-@login_required
-def wrapped(request):
-    access_token = request.session.get('spotify_access_token')
-
-    if not access_token:
-        return redirect('spotify_login')
-
-    user_data = get_spotify_user_info(access_token)
-    top_artists_data = get_spotify_top_artists(access_token, 5)
-    top_tracks_data = get_spotify_top_tracks(access_token)
-    top_genres_data = get_spotify_top_genres(access_token)
-
-    return render(request, 'wrapped.html', {
-        'user_data': user_data,
-        'top_artists': top_artists_data,
-        'top_tracks': top_tracks_data,
-        'top_genres': top_genres_data # Pass top artists to the template
-    })
 
 @login_required
 def account(request):

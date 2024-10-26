@@ -91,7 +91,7 @@ def spotify_callback(request):
         request.session['spotify_access_token'] = access_token
         request.session['spotify_profile'] = profile_data
 
-        # Redirect to a view (like 'wrapped') after login
+        # Redirect to a select page
         return redirect('wrapped:select')
 
     else:
