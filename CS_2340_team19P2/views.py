@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.conf import settings
 from django.shortcuts import redirect
-from collections import Counter
 
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
@@ -22,125 +21,8 @@ def spotify_login(request):
         "&show_dialog=true"  # Add this to force reauthorization
     )
     return redirect(auth_url)
-# Handle Spotify callback after user authorizes
-def spotify_callback(request):
-    code = request.GET.get('code')
-    token_url = "https://accounts.spotify.com/api/token"
 
-    response = requests.post(token_url,
-        data={
-            "grant_type": "authorization_code",
-            "code": code,
-            "redirect_uri": settings.SPOTIFY_REDIRECT_URI,
-            "client_id": settings.SPOTIFY_CLIENT_ID,
-            "client_secret": settings.SPOTIFY_CLIENT_SECRET
-        },
-        headers={
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    )
-
-    token_data = response.json()
-    access_token = token_data.get('access_token')
-    refresh_token = token_data.get('refresh_token')
-
-    # Check if access token is successfully obtained
-    print("Access Token:", access_token)
-
-    request.session['access_token'] = access_token
-    request.session['refresh_token'] = refresh_token
-
-    return JsonResponse({'access_token': access_token, 'refresh_token': refresh_token})
 # View user account info with Spotify data
-def account(request):
-    access_token = request.session.get('access_token')
-
-    if not access_token:
-        return redirect('spotify_login')
-
-    user_profile_url = "https://api.spotify.com/v1/me"
-    headers = {"Authorization": f"Bearer {access_token}"}
-
-    response = requests.get(user_profile_url, headers=headers)
-
-    if response.status_code != 200:
-        return JsonResponse({'error': 'Failed to fetch user data'}, status=response.status_code)
-
-    user_data = response.json()
-
-    return render(request, 'accountInfo.html', {'user': user_data})
-
-def get_spotify_user_info(access_token):
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-        'Content-Type': 'application/json'
-    }
-    response = requests.get(f"{SPOTIFY_API_URL}", headers=headers)
-    return response.json()
-
-def get_spotify_top_artists(access_token, limit):
-    url = "https://api.spotify.com/v1/me/top/artists"
-    headers = {"Authorization": f"Bearer {access_token}"}
-    params = {
-        "limit": limit # You can specify how many top artists you want to retrieve
-    }
-
-    response = requests.get(url, headers=headers, params=params)
-
-    # Print the status code and response for debugging
-    print("Spotify API Status Code:", response.status_code)
-    print("Spotify API Response:", response.json())
-
-    if response.status_code != 200:
-        return None
-
-    return response.json()
-
-def get_spotify_top_tracks(access_token):
-    url = "https://api.spotify.com/v1/me/top/tracks"
-    headers = {"Authorization": f"Bearer {access_token}"}
-    params = {
-        "limit": 10  # You can specify how many top artists you want to retrieve
-    }
-
-    response = requests.get(url, headers=headers, params=params)
-
-    # Print the status code and response for debugging
-    print("Spotify API Status Code:", response.status_code)
-    print("Spotify API Response:", response.json())
-
-    if response.status_code != 200:
-        return None
-
-    return response.json()
-
-
-def get_spotify_top_genres(access_token):
-    artists = get_spotify_top_artists(access_token, 50).get("items", [])
-
-    if artists is None:
-        print("Failed to fetch top tracks. The returned value is None.")
-        return []
-
-    if not artists:
-        print("No top tracks found.")
-        return []
-
-    all_genres = []
-
-    for artist in artists:
-        genres = artist.get('genres', [])
-        all_genres.extend([genre.title() for genre in genres])
-
-    genre_counts = Counter(all_genres)
-
-    sorted_genres = genre_counts.most_common()[0:10]
-    genre_list = []
-    for genre, count in sorted_genres:
-        genre_list.append(genre)
-    return genre_list
-
-
 def get_spotify_token(auth_code):
     token_url = "https://accounts.spotify.com/api/token"
 
@@ -182,54 +64,6 @@ def refresh_access_token(request):
 
     return JsonResponse({'access_token': access_token})
 
-@login_required
-def select(request):
-    return render(request, 'wrappedSelect.html', {
-
-    })
-@login_required
-def invite(request):
-    return render(request, 'wrappedInvite.html', {
-
-    })
-
-@login_required
-def duo(request):
-    return render(request, 'wrappedDuo.html', {
-
-    })
-
-@login_required
-def wrapped(request):
-    access_token = request.session.get('spotify_access_token')
-
-    if not access_token:
-        return redirect('spotify_login')
-
-    user_data = get_spotify_user_info(access_token)
-    top_artists_data = get_spotify_top_artists(access_token, 10)
-    top_tracks_data = get_spotify_top_tracks(access_token)
-    top_genres_data = get_spotify_top_genres(access_token)
-
-    if top_artists_data is None:
-        print("Top artists data is not available.")
-    else:
-        print("Top artists retrieved successfully.")
-    if top_tracks_data is None:
-        print("Top artists data is not available.")
-    else:
-        print("Top artists retrieved successfully.")
-    if len(top_genres_data) == 0:
-        print("Top genres data is not available.")
-    else:
-        print("Top genres retrieved successfully.")
-
-    return render(request, 'wrapped.html', {
-        'user_data': user_data,
-        'top_artists': top_artists_data,
-        'top_tracks': top_tracks_data,
-        'top_genres': top_genres_data # Pass top artists to the template
-    })
 def spotify_callback(request):
     code = request.GET.get('code')
 
@@ -258,13 +92,14 @@ def spotify_callback(request):
         request.session['spotify_profile'] = profile_data
 
         # Redirect to a view (like 'wrapped') after login
-        return redirect('wrapped')
+        return redirect('wrapped:select')
 
     else:
         # Handle the case where the code is missing
         return render(request, 'error.html', {"message": "Failed to authenticate with Spotify"})
+
 @login_required
-def contactDevelopers(request):
+def contact_developers(request):
     """
     Renders the contact developers page.
 
@@ -275,6 +110,4 @@ def contactDevelopers(request):
     :param request: The HTTP request object associated with the user's session.
     :return: Renders the 'contactDevelopers.html' template.
     """
-    return render(request, 'contactDevelopers.html', {
-
-    })
+    return render(request, 'contactDevelopers.html', {})

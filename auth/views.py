@@ -26,7 +26,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # Log the user in after registration
-            return redirect('wrapped:select')  # Redirect to the Google Maps page
+            return redirect('wr')  # Redirect to the Google Maps page
         else:
             # Iterate over form errors and add to messages
             for field, errors in form.errors.items():
@@ -63,7 +63,7 @@ the login form via a POST request, the function attempts to authenticate
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('wrapped:select')  # Redirect to the wrappedSelect page
+            return redirect('wrapped:user_spotify_login')  # Redirect to the login with Spotify page
         else:
             messages.error(request, "Invalid username or password")
     return render(request, 'login.html')
