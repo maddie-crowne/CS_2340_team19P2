@@ -16,6 +16,9 @@
 {#<p>Spotify ID: {{ user_data.id }}</p>#}
 {#<p>Country: {{ user_data.country }}</p>#}
 {#<img src="{{ user_data.images.0.url }}" alt="Profile Picture"/>#}
+
+<button id="play-tracks">Play Top Tracks</button>
+
 <h3>Top Artists</h3>
 <ul>
     {% if top_artists %}
@@ -26,9 +29,10 @@
         <p>No top artists available.</p>
     {% endif %}
 </ul>
+
 <h3>Your Top Tracks</h3>
 <ul id="track-list">
-    {% for track in top_tracks.items %}
+    {% for track in top_tracks.items|slice:":5" %}
         <li>
             {{ track.name }} by
             {% if track.artists %}
@@ -54,4 +58,6 @@
         <p>No top genres available.</p>
     {% endif %}
 </ul>
-<button id="play-tracks">Play Top Tracks</button>
+
+<h2>Average Valence of Top Tracks</h2>
+<p>The average valence of your top tracks for the selected time frame is: {{ average_valence }}</p>

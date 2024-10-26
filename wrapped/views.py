@@ -24,7 +24,7 @@ def wrapped(request):
 
     user_data = get_spotify_user_info(access_token)
     top_artists_data = get_spotify_top_artists(access_token, 5, time_range)
-    top_tracks_data = get_spotify_top_tracks(access_token , time_range)
+    top_tracks_data, average_valence = get_spotify_top_tracks_and_valence(access_token, time_range)
     top_genres_data = get_spotify_top_genres(access_token , time_range)
 
     return render(request, 'wrapped.html', {
@@ -32,6 +32,7 @@ def wrapped(request):
         'top_artists': top_artists_data,
         'top_tracks': top_tracks_data,
         'top_genres': top_genres_data, # Pass top artists to the template
+        'average_valence': average_valence,
         'selected_time_range': time_range
     })
 
@@ -58,20 +59,46 @@ def get_spotify_top_artists(access_token, limit, time_range):
 
     return response.json()
 
-def get_spotify_top_tracks(access_token, time_range):
-    url = "https://api.spotify.com/v1/me/top/tracks"
+
+def get_spotify_top_tracks_and_valence(access_token, time_range):
+    # Fetch the top tracks
+    top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
     headers = {"Authorization": f"Bearer {access_token}"}
     params = {
-        "limit": 5,
+        "limit": 50,
         "time_range": time_range
     }
 
-    response = requests.get(url, headers=headers, params=params)
-
+    response = requests.get(top_tracks_url, headers=headers, params=params)
     if response.status_code != 200:
-        return None
+        return None, 0  # Return None and 0 if failed to fetch tracks
 
-    return response.json()
+    top_tracks_data = response.json()
+
+    # Get track IDs for fetching audio features
+    track_ids = [track['id'] for track in top_tracks_data.get('items', []) if track.get('id')]
+
+    # Fetch audio features for the top tracks
+    audio_features_url = "https://api.spotify.com/v1/audio-features"
+    params = {
+        "ids": ','.join(track_ids)
+    }
+
+    audio_response = requests.get(audio_features_url, headers=headers, params=params)
+    if audio_response.status_code != 200:
+        return top_tracks_data, 0  # Return top tracks and 0 if failed to fetch audio features
+
+    audio_features_data = audio_response.json()
+
+    # Calculate average valence
+    if audio_features_data and 'audio_features' in audio_features_data:
+        valences = [feature['valence'] for feature in audio_features_data['audio_features'] if
+                    feature['valence'] is not None]
+        average_valence = sum(valences) / len(valences) if valences else 0
+    else:
+        average_valence = 0
+
+    return top_tracks_data, average_valence
 
 
 def get_spotify_top_genres(access_token, time_range):
