@@ -1,6 +1,3 @@
-{% load static %}
-<script src='{% static 'playClips.js' %}'></script>
-
 <h1>Wrapped</h1>
 <h2>Welcome, {{ user_data.display_name }}!</h2>
 
@@ -17,12 +14,18 @@
 {#<p>Country: {{ user_data.country }}</p>#}
 {#<img src="{{ user_data.images.0.url }}" alt="Profile Picture"/>#}
 
-<button id="play-tracks">Play Top Tracks</button>
 
 <h3>Top Artists</h3>
+<button id="play-artist-songs">Play Top Artist Songs</button>
+{% for artist, preview_url in artist_songs.items %}
+    <audio class="artist-audio">
+        <source src="{{ preview_url }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+{% endfor %}
 <ul>
     {% if top_artists %}
-        {% for artist in top_artists.items %}
+        {% for artist in top_artists.items|slice:":5" %}
             <li>{{ artist.name }}</li>
         {% endfor %}
     {% else %}
@@ -30,7 +33,32 @@
     {% endif %}
 </ul>
 
+<script>
+    document.getElementById('play-artist-songs').addEventListener('click', function() {
+        const audios = document.querySelectorAll('.artist-audio');
+        let index = 0;
+
+        function playNext() {
+            if (index < audios.length) {
+                audios[index].play().then(() => {
+                    audios[index].onended = function() {
+                        index++;
+                        playNext();
+                    };
+                }).catch(err => {
+                    console.error('Error playing audio:', err);
+                    index++;
+                    playNext();
+                });
+            }
+        }
+
+        playNext();
+    });
+</script>
+
 <h3>Your Top Tracks</h3>
+<button id="play-tracks">Play Top Tracks</button>
 <ul id="track-list">
     {% for track in top_tracks.items|slice:":5" %}
         <li>
