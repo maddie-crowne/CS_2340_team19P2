@@ -76,6 +76,30 @@
     {% endfor %}
 </ul>
 
+<script>
+    document.getElementById('play-tracks').addEventListener('click', function() {
+        const audios = document.querySelectorAll('.track-audio');
+        let index = 0;
+    
+        function playNext() {
+            if (index < audios.length) {
+                audios[index].play().then(() => {
+                    audios[index].onended = function() {
+                        index++;
+                        playNext();
+                    };
+                }).catch(err => {
+                    console.error('Error playing audio:', err);
+                    index++;
+                    playNext();
+                });
+            }
+        }
+    
+        playNext();
+    });
+</script>
+
 <h3>Top Genres</h3>
 <button id="play-genre-songs">Play Top Genre Songs</button>
 {% for genre, preview_url in genre_songs.items %}
