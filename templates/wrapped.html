@@ -77,6 +77,13 @@
 </ul>
 
 <h3>Top Genres</h3>
+<button id="play-genre-songs">Play Top Genre Songs</button>
+{% for genre, preview_url in genre_songs.items %}
+    <audio class="genre-audio">
+        <source src="{{ preview_url }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+{% endfor %}
 <ul>
     {% if top_genres %}
         {% for genre in top_genres %}
@@ -87,5 +94,29 @@
     {% endif %}
 </ul>
 
-<h2>Average Valence of Top Tracks</h2>
+<script>
+    document.getElementById('play-genre-songs').addEventListener('click', function() {
+        const audios = document.querySelectorAll('.genre-audio');
+        let index = 0;
+
+        function playNext() {
+            if (index < audios.length) {
+                audios[index].play().then(() => {
+                    audios[index].onended = function() {
+                        index++;
+                        playNext();
+                    };
+                }).catch(err => {
+                    console.error('Error playing audio:', err);
+                    index++;
+                    playNext();
+                });
+            }
+        }
+
+        playNext();
+    });
+</script>
+
+<h3>Average Valence of Top Tracks</h3>
 <p>The average valence of your top tracks for the selected time frame is: {{ average_valence }}</p>

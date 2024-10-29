@@ -20,7 +20,7 @@ def wrapped(request):
     time_range = request.GET.get('time_range', 'medium_term')
 
     user_data = get_spotify_user_info(access_token)
-    top_artists_data, top_genres_data, top_tracks_data, average_valence, artist_songs = get_spotify_top_data(access_token, time_range)
+    top_artists_data, top_genres_data, top_tracks_data, average_valence, artist_songs, genre_songs = get_spotify_top_data(access_token, time_range)
 
     return render(request, 'wrapped.html', {
         'user_data': user_data,
@@ -28,6 +28,7 @@ def wrapped(request):
         'artist_songs': artist_songs,
         'top_tracks': top_tracks_data,
         'top_genres': top_genres_data,
+        'genre_songs': genre_songs,
         'average_valence': average_valence,
         'selected_time_range': time_range
     })
@@ -51,23 +52,21 @@ def get_spotify_top_data(access_token, time_range):
 
     top_artists = requests.get(url, headers=headers, params=params)
     if top_artists.status_code != 200:
-        return None, [], None, 0, {}
+        return None, [], None, 0, {}, {}
     top_artists = top_artists.json()
 
     # Top Genres
     artists = top_artists.get("items", [])
 
     if artists is None or not artists:
-        return top_artists, [], None, 0, {}
+        return top_artists, [], None, 0, {}, {}
 
     all_genres = []
-
     for artist in artists:
         genres = artist.get('genres', [])
         all_genres.extend([genre.title() for genre in genres])
 
     genre_counts = Counter(all_genres)
-
     sorted_genres = genre_counts.most_common()[0:5]
     genre_list = []
     for genre, count in sorted_genres:
@@ -83,7 +82,7 @@ def get_spotify_top_data(access_token, time_range):
 
     top_tracks_data = requests.get(top_tracks_url, headers=headers, params=params)
     if top_tracks_data.status_code != 200:
-        return top_artists, genre_list, None, 0, {}
+        return top_artists, genre_list, None, 0, {}, {}
     top_tracks_data = top_tracks_data.json()
 
     # Average Valence
@@ -98,7 +97,7 @@ def get_spotify_top_data(access_token, time_range):
 
     audio_response = requests.get(audio_features_url, headers=headers, params=params)
     if audio_response.status_code != 200:
-        return top_artists, genre_list, top_tracks_data, -1, {}
+        return top_artists, genre_list, top_tracks_data, -1, {}, {}
 
     audio_features_data = audio_response.json()
 
@@ -115,9 +114,6 @@ def get_spotify_top_data(access_token, time_range):
     # Get the top 5 artists
     top_artists_list = top_artists.get('items', [])[:5]
 
-    # Create a set of artist names for quick lookup
-    top_artist_names = {artist['name'] for artist in top_artists_list}
-
     # Loop through top tracks to find songs by top artists
     for track in top_tracks_data.get('items', []):
         track_artists = {artist['name'] for artist in track['artists']}
@@ -130,7 +126,7 @@ def get_spotify_top_data(access_token, time_range):
                 artist_songs[artist_name] = track.get('preview_url')
                 break  # Exit loop after finding the first song for this artist
 
-    # Now, check for any artists without songs and fetch their most popular song
+    # Check for any artists without songs and fetch their most popular song
     for artist in top_artists_list:
         artist_name = artist['name']
 
@@ -143,7 +139,47 @@ def get_spotify_top_data(access_token, time_range):
     # Create a list to preserve the order of top artists
     ordered_artist_songs = {artist['name']: artist_songs.get(artist['name']) for artist in top_artists_list}
 
-    return top_artists, genre_list, top_tracks_data, average_valence, ordered_artist_songs
+    # Top Genre Songs
+    genre_songs = {}
+    added_songs = set()  # Set to keep track of added song URLs
+    artist_genre_cache = {}  # Dictionary to cache artist genres
+
+    # Function to get artist genres with caching
+    def get_artist_genres_cached(artist_id):
+        if artist_id in artist_genre_cache:
+            return artist_genre_cache[artist_id]
+
+        artist_url = f"https://api.spotify.com/v1/artists/{artist_id}"
+        response = requests.get(artist_url, headers=headers)
+
+        if response.status_code == 200:
+            genres = response.json().get('genres', [])
+            artist_genre_cache[artist_id] = genres  # Cache the result
+            return genres
+        return []
+
+    # Loop through the list of genres
+    for genre in genre_list:
+        # Check each track in top_tracks
+        for track in top_tracks_data.get('items', []):
+            track_artists = track['artists']
+            track_preview_url = track.get('preview_url')
+
+            # Check if any of the artists in the track match the genre
+            for artist in track_artists:
+                artist_genres = get_artist_genres_cached(artist['id'])
+
+                if genre.lower() in (g.lower() for g in artist_genres):
+                    # If a matching artist is found and the song is not already added
+                    if track_preview_url not in added_songs:
+                        genre_songs[genre] = track_preview_url
+                        added_songs.add(track_preview_url)  # Add the song URL to the set
+                    break  # Exit the loop after checking the first matching artist
+
+            if genre in genre_songs:
+                break  # Exit the genre loop if a song was found
+
+    return top_artists, genre_list, top_tracks_data, average_valence, ordered_artist_songs, genre_songs
 
 def get_artist_songs(access_token, artist_id):
     url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks"
