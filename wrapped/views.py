@@ -2,6 +2,7 @@ from collections import Counter
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.shortcuts import redirect
+from wrapped.models import SaveWrap
 import requests
 
 SPOTIFY_API_URL = "https://api.spotify.com/v1/me"
@@ -21,6 +22,20 @@ def wrapped(request):
 
     user_data = get_spotify_user_info(access_token)
     top_artists_data, top_genres_data, top_tracks_data, average_valence, artist_songs, genre_songs = get_spotify_top_data(access_token, time_range)
+
+    # Save the wrap data automatically upon loading
+    favorite_wrap = SaveWrap(
+        user=request.user,
+        user_data=user_data,
+        top_artists=top_artists_data,
+        artist_songs=artist_songs,
+        top_tracks=top_tracks_data,
+        top_genres=top_genres_data,
+        genre_songs=genre_songs,
+        average_valence=average_valence,
+        time_range=time_range
+    )
+    favorite_wrap.save()
 
     return render(request, 'wrapped.html', {
         'user_data': user_data,
@@ -192,7 +207,23 @@ def get_artist_songs(access_token, artist_id):
 
 @login_required
 def account(request):
-    return render(request, 'accountInfo.html')
+    user = request.user
+    saved = SaveWrap.objects.filter(user=user)
+
+    context = {
+        'user': user,
+        'saved': saved,
+    }
+
+    return render(request, 'accountInfo.html', context)
+
+
+@login_required
+def delete_wrap(request, wrap_id):
+    if request.method == 'POST':
+        wrap = SaveWrap.objects.get(id=wrap_id, user=request.user)
+        wrap.delete()
+        return redirect('wrapped:account')
 
 @login_required
 def select(request):

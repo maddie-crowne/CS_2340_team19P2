@@ -2,8 +2,6 @@
 
 <div class="account-details">
     <h1>Account Details</h1>
-    {#    <img src="{% static 'images/account.png' %}" alt="logo" class="account-avatar">#}
-    
     <div class="name">
         <p><span class="info-label"></span> {{ user.first_name }} {{ user.last_name }}</p>
     </div>
@@ -19,4 +17,28 @@
         {% csrf_token %}
         <button type="submit" class="delete-account-button">Delete Account</button>
     </form>
+</div>
+
+<div class="saved-wraps">
+    <h1>Your Favorite Wraps</h1>
+    <ul class="saved-individual-wraps">
+        {% for wrap in saved %}
+            <li>
+                <strong>Time Range:</strong> {{ wrap.time_range }}<br>
+                <strong>Top Genres:</strong> {{ wrap.top_genres|join:", " }}<br>
+                <strong>Average Valence:</strong> {{ wrap.average_valence }}<br>
+                <strong>Top Artists:</strong> {{ wrap.top_artists|join:", " }}<br>
+                <strong>Created At:</strong> {{ wrap.created_at }}
+                
+                <!-- Delete Button -->
+                <form action="{% url 'wrapped:delete_wrap' wrap.id %}" method="POST"
+                      onsubmit="return confirm('Are you sure you want to unsave this wrap?');">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-wrap-button">Delete</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>No favorite wraps found.</li>
+        {% endfor %}
+    </ul>
 </div>
