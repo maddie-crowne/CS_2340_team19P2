@@ -44,7 +44,7 @@ def user_login(request):
     Handles user login functionality.
 
     This view processes both GET and POST requests. When the user submits
-the login form via a POST request, the function attempts to authenticate
+    the login form via a POST request, the function attempts to authenticate
     the user using the provided username and password. If authentication is
     successful, the user is logged in and redirected to a specified page.
     If the authentication fails, an error message is added to the request's
