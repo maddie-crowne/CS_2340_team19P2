@@ -24,12 +24,16 @@
     <ul class="saved-individual-wraps">
         {% for wrap in saved %}
             <li>
-                <strong>Time Range:</strong> {{ wrap.time_range }}<br>
-                <strong>Top Genres:</strong> {{ wrap.top_genres|join:", " }}<br>
-                <strong>Average Valence:</strong> {{ wrap.average_valence }}<br>
-                <strong>Top Artists:</strong> {{ wrap.top_artists|join:", " }}<br>
+                {% if wrap.time_range == 'short_term' %}
+                    <p>Monthly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
+                {% elif wrap.time_range == 'medium_term' %}
+                    <p>6 Month Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
+                {% elif wrap.time_range == 'long_term' %}
+                    <p>Yearly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
+                {% endif %}
+
                 <strong>Created At:</strong> {{ wrap.created_at }}
-                
+
                 <!-- Delete Button -->
                 <form action="{% url 'wrapped:delete_wrap' wrap.id %}" method="POST"
                       onsubmit="return confirm('Are you sure you want to unsave this wrap?');">
@@ -42,3 +46,70 @@
         {% endfor %}
     </ul>
 </div>
+
+<script>
+// Array of month names
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+// Function to parse non-standard date formats (like "Nov. 2, 2024, 2:11 p.m.")
+function parseCustomDate(dateString) {
+    // Extract the date portion (e.g., "Nov. 2, 2024") and remove the time
+    const datePart = dateString.split(',')[0];
+    
+    // Replace month abbreviation with full month name (if needed)
+    const monthAbbr = datePart.split(' ')[0].replace('.', '');
+    const monthIndex = months.findIndex(month => month.toLowerCase().startsWith(monthAbbr.toLowerCase()));
+
+    // Extract the year
+    const year = dateString.split(',')[1].trim();  // The part after the comma (e.g., "2024")
+
+    // Formatted date string with full month name, day, and year
+    const formattedDate = `${months[monthIndex]} ${datePart.split(' ')[1]}, ${year}`;
+    return new Date(formattedDate);
+}
+
+// Function to get month range
+function getMonthRange(createdAt, timeRange) {
+    const createdDate = parseCustomDate(createdAt);
+    const currentMonth = createdDate.getMonth();
+    const currentYear = createdDate.getFullYear();
+
+    let startMonth, endMonth, startYear, endYear;
+
+    if (timeRange === 'short_term') {
+        // Monthly wrapped
+        startMonth = (currentMonth - 1 + 12) % 12;  // 5 months before
+        startYear = currentYear - (currentMonth - 1 < 0 ? 1 : 0); // Adjust year if needed
+        endMonth = currentMonth;
+        endYear = currentYear;
+    } else if (timeRange === 'medium_term') {
+        // 6 months wrapped
+        startMonth = (currentMonth - 5 + 12) % 12;  // 5 months before
+        startYear = currentYear - (currentMonth - 5 < 0 ? 1 : 0); // Adjust year if needed
+        endMonth = currentMonth;
+        endYear = currentYear;
+    } else if (timeRange === 'long_term') {
+        // Yearly wrapped
+        startMonth = (currentMonth - 12 + 12) % 12;  // 5 months before
+        startYear = currentYear - (currentMonth - 12 < 0 ? 1 : 0); // Adjust year if needed
+        endMonth = currentMonth;
+        endYear = currentYear;
+    }
+
+    // Format months and years for display
+    const startMonthName = months[startMonth];
+    const endMonthName = months[endMonth];
+
+    return `${startMonthName} ${startYear} - ${endMonthName} ${endYear}`;
+}
+
+// Add the month range to each "month-range" span
+document.querySelectorAll('.month-range').forEach(function(element) {
+    const createdAt = element.getAttribute('data-created-at');
+    const timeRange = element.closest('li').querySelector('p').textContent.trim().toLowerCase().includes('monthly') ? 'short_term' :
+                      element.closest('li').querySelector('p').textContent.trim().toLowerCase().includes('6 month') ? 'medium_term' :
+                      'long_term';
+    const monthRange = getMonthRange(createdAt, timeRange);
+    element.textContent = monthRange;
+});
+</script>
