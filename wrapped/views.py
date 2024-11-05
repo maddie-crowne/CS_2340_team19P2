@@ -1,6 +1,8 @@
 from collections import Counter
+
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from wrapped.models import SaveWrap
 import requests
@@ -24,7 +26,7 @@ def wrapped(request):
     top_artists_data, top_genres_data, top_tracks_data, average_valence, artist_songs, genre_songs = get_spotify_top_data(access_token, time_range)
 
     # Save the wrap data automatically upon loading
-    favorite_wrap = SaveWrap(
+    saved_wrap = SaveWrap(
         user=request.user,
         user_data=user_data,
         top_artists=top_artists_data,
@@ -35,7 +37,7 @@ def wrapped(request):
         average_valence=average_valence,
         time_range=time_range
     )
-    favorite_wrap.save()
+    saved_wrap.save()
 
     return render(request, 'wrapped.html', {
         'user_data': user_data,
@@ -47,6 +49,32 @@ def wrapped(request):
         'average_valence': average_valence,
         'selected_time_range': time_range
     })
+
+@login_required
+def view_saved_wrap(request, wrap_id):
+    # Get the specific saved wrap by ID
+    wrap = get_object_or_404(SaveWrap, id=wrap_id, user=request.user)  # Ensure it's the current user's wrap
+
+    # Get the user data (this will be the current user from the request)
+    user_data = request.user  # User data from the authenticated user
+
+    # Get the time range from the request, default to the wrap's time range if not provided
+    time_range = request.GET.get('time_range', wrap.time_range)
+
+    # Prepare context to pass to the template
+    context = {
+        'user_data': user_data,
+        'top_artists': wrap.top_artists,
+        'artist_songs': wrap.artist_songs,
+        'top_tracks': wrap.top_tracks,
+        'top_genres': wrap.top_genres,
+        'genre_songs': wrap.genre_songs,
+        'average_valence': wrap.average_valence,
+        'selected_time_range': time_range,
+    }
+
+    # Render the wrapped.html template with the context data
+    return render(request, 'wrapped.html', context)
 
 def get_spotify_user_info(access_token):
     headers = {

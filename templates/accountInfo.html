@@ -24,16 +24,16 @@
     <ul class="saved-individual-wraps">
         {% for wrap in saved %}
             <li>
-                {% if wrap.time_range == 'short_term' %}
-                    <p>Monthly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
-                {% elif wrap.time_range == 'medium_term' %}
-                    <p>6 Month Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
-                {% elif wrap.time_range == 'long_term' %}
-                    <p>Yearly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
-                {% endif %}
-
-                <strong>Created At:</strong> {{ wrap.created_at }}
-
+                <a href="{% url 'wrapped:view_saved_wrap' wrap.id %}?time_range={{ wrap.time_range }}">
+                    {% if wrap.time_range == 'short_term' %}
+                        <p>Monthly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
+                    {% elif wrap.time_range == 'medium_term' %}
+                        <p>6 Month Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
+                    {% elif wrap.time_range == 'long_term' %}
+                        <p>Yearly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
+                    {% endif %}
+                </a>
+            
                 <!-- Delete Button -->
                 <form action="{% url 'wrapped:delete_wrap' wrap.id %}" method="POST"
                       onsubmit="return confirm('Are you sure you want to unsave this wrap?');">
