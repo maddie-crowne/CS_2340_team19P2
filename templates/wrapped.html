@@ -1,3 +1,39 @@
+<style>
+    body {
+        overflow: hidden; /* Prevents the main scrollbar from showing */
+    }
+
+    .slide-container {
+        display: flex;
+        flex-direction: column; /* Stack slides vertically */
+        height: 100vh; /* Full viewport height */
+        overflow-y: scroll; /* Enable vertical scrolling */
+    }
+
+    .slide {
+        flex: 0 0 100%; /* Each slide takes full height */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Center content vertically */
+        align-items: center; /* Center content horizontally */
+        padding: 20px; /* Optional padding */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+    }
+
+    progress {
+        width: 100%; /* Full width */
+        background-color: black; /* Background of the progress bar */
+        border-radius: 5px; /* Rounded corners */
+    }
+
+    .progress-bar {
+        height: 20px; /* Height of the progress */
+        background-color: #4CAF50; /* Color of the filled part */
+        width: {{ temperature }}%; /* Width based on temperature */
+        border-radius: 5px; /* Rounded corners */
+    }
+</style>
+
 <h1>Wrapped</h1>
 <h2>Welcome, {{ user_data.first_name }}!</h2>
 
