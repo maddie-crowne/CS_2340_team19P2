@@ -34,43 +34,155 @@
     }
 </style>
 
-<h1>Wrapped</h1>
-<h2>Welcome, {{ user_data.first_name }}!</h2>
 
-{% if selected_time_range == 'short_term' %}
-    <h2>This is your Wrapped for the past month.</h2>
-{% elif selected_time_range == 'medium_term' %}
-    <h2>This is your Wrapped for the past 6 months.</h2>
-{% elif selected_time_range == 'long_term' %}
-    <h2>This is your Wrapped for the past year.</h2>
-{% endif %}
+<div class="slide-container">
+    <div class="slide">
+{#        <p>Email: {{ user_data.email }}</p>#}
+{#        <p>Spotify ID: {{ user_data.id }}</p>#}
+{#        <p>Country: {{ user_data.country }}</p>#}
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+            <h1 style="font-size: 60px;">{{ user_data.display_name }}'s</h1>
+            <h1 style="font-size: 60px; margin-top: -40px;">Wrapped</h1>
+             <img src="{{ user_data.images.0.url }}" alt="Profile Picture"
+                style="border-radius: 150px; width: 300px;"/>
+        </div>
 
-{#<p>Email: {{ user_data.email }}</p>#}
-{#<p>Spotify ID: {{ user_data.id }}</p>#}
-{#<p>Country: {{ user_data.country }}</p>#}
-{#<img src="{{ user_data.images.0.url }}" alt="Profile Picture"/>#}
+        {% if selected_time_range == 'short_term' %}
+            <h2>This is your Wrapped for the past month.</h2>
+        {% elif selected_time_range == 'medium_term' %}
+            <h2>This is your Wrapped for the past 6 months.</h2>
+        {% elif selected_time_range == 'long_term' %}
+            <h2>This is your Wrapped for the past year.</h2>
+        {% endif %}
+    </div>
 
+    <div class="slide">
+        <h2>Average Valence of Top Tracks</h2>
+        <p>The average valence of your top tracks for the selected time frame is: {{ average_valence }}</p>
+        <p>Temperature: {{ temperature }}</p>
+        <div class="progress">
+            <div class="progress-bar"></div> <!-- This is the filled part of the bar -->
+        </div>
+    </div>
 
-<h3>Top Artists</h3>
-<button id="play-artist-songs">Play Top Artist Songs</button>
-{% for artist, preview_url in artist_songs.items %}
-    <audio class="artist-audio">
-        <source src="{{ preview_url }}" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-{% endfor %}
-<ul>
-    {% if top_artists %}
-        {% for artist in top_artists.items|slice:":5" %}
-            {% if artist.images.0.url %}
-                <img src="{{ artist.images.0.url }}" alt="Artist Picture" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
-            {% endif %}
-            <li>{{ artist.name }}</li>
+    <div class="slide" style="display: flex; justify-content: flex-end; align-items: flex-end;">
+        <div style="width: 10%; text-align: right;">
+            <h1 style="font-size: 125px;">Top</h1>
+            <h1 style="font-size: 175px; margin-top: -100px; margin-bottom: -100px;">5</h1>
+            <h1 style="font-size: 125px;">Tracks</h1>
+        </div>
+    </div>
+
+    <div class="slide">
+        <button id="play-tracks">Play Top Tracks</button>
+        <div style="width: 40%; margin: auto;">
+            <ol id="track-list" style="list-style-position: inside; padding-left: 0;">
+                {% for track in top_tracks.items|slice:":5" %}
+                    <li style="display: flex; align-items: center; flex-direction: {% if forloop.first %}column{% else %}row{% endif %};
+                            text-align: center; margin-bottom: 15px; {% if forloop.first %} font-size: 1.5em; {% endif %}">
+
+                        {% if track.album.images.0.url %}
+                            <div style="width: {% if forloop.first %}120px{% else %}50px{% endif %}; height: {% if forloop.first %}120px{% else %}50px{% endif %};
+                                        margin-bottom: {% if forloop.first %}10px{% else %}0{% endif %};
+                                        margin-right: {% if forloop.first %}0px{% else %}15px{% endif %};">
+                                <img src="{{ track.album.images.0.url }}" alt="Album Cover"
+                                     style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                        {% endif %}
+
+                        <div style="{% if forloop.first %}margin-top: 10px;{% endif %}">
+                            {{ track.name }}
+                            {% if not forloop.first %} {% endif %}
+                            {% if track.artists %}
+                                - {{ track.artists.0.name }}
+                            {% else %}
+                                Unknown Artist
+                            {% endif %}
+                        </div>
+
+                        {% if not forloop.first %}
+                            <audio class="track-audio">
+                                <source src="{{ track.preview_url }}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+
+    <div class="slide" style="align-items: flex-start;">
+        <div style="justify-content: left; margin-left: 40px; width: 10%;">
+            <h1 style="font-size: 125px">Top</h1>
+            <h1 style="font-size: 175px; margin-top: -100px; margin-bottom: -100px;">5</h1>
+            <h1 style="font-size: 125px">Artists</h1>
+        </div>
+    </div>
+
+    <div class="slide">
+        <button id="play-artist-songs">Play Top Artist Songs</button>
+        {% for artist, preview_url in artist_songs.items %}
+            <audio class="artist-audio">
+                <source src="{{ preview_url }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
         {% endfor %}
-    {% else %}
-        <p>No top artists available.</p>
-    {% endif %}
-</ul>
+        <div style="text-align: center;">
+            <ul style="list-style-type: none; padding: 0;">
+                {% if top_artists %}
+                    <li style="margin-bottom: 20px;">
+                        {% if top_artists.items.0.images.0.url %}
+                            <img src="{{ top_artists.items.0.images.0.url }}" alt="Top Artist Picture" style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 10px;">
+                        {% endif %}
+                        <div style="font-size: 1.5em;">{{ top_artists.items.0.name }}</div>
+                    </li>
+                    <li>
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            {% for artist in top_artists.items|slice:":4" %}
+                                <div style="margin: 0 10px; text-align: center;">
+                                    {% if artist.images.0.url %}
+                                        <img src="{{ artist.images.0.url }}" alt="Artist Picture" style="width: 50px; height: 50px; object-fit: cover; margin-bottom: 5px;">
+                                    {% endif %}
+                                    <div>{{ forloop.counter }}. {{ artist.name }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </li>
+                {% else %}
+                    <p>No top artists available.</p>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h3 style="text-align: center;">Top Genres</h3>
+        <button id="play-genre-songs" style="display: block; margin: 0 auto;">Play Top Genre Songs</button>
+
+        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+            {% if top_genres %}
+                <p style="font-size: 1.5em; text-align: center;">Your top genre: {{ top_genres.0 }}</p>
+            {% else %}
+                <p>No top genres available.</p>
+            {% endif %}
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; justify-items: center;">
+            {% if top_genres %}
+                {% for genre in top_genres|slice:":5" %}
+                    {% if forloop.counter > 1 %}
+                        <div style="border: 1px solid black; padding: 10px; text-align: center; width: 100%; max-width: 150px;">
+                            <p>{{ genre }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No top genres available.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
 <script>
     document.getElementById('play-artist-songs').addEventListener('click', function() {
@@ -94,95 +206,69 @@
 
         playNext();
     });
-</script>
 
-<h3>Your Top Tracks</h3>
-<button id="play-tracks">Play Top Tracks</button>
-<ul id="track-list">
-    {% for track in top_tracks.items|slice:":5" %}
-        {% if track.album.images.0.url %}
-            <img src="{{ track.album.images.0.url }}" alt="Album Cover" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
-        {% endif %}
-        <li>
-            {{ track.name }} by
-            {% if track.artists %}
-                {{ track.artists.0.name }}
-            {% else %}
-                Unknown Artist
-            {% endif %}
-            <audio class="track-audio">
-                <source src="{{ track.preview_url }}" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-    {% endfor %}
-</ul>
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
 
-<script>
-    document.getElementById('play-tracks').addEventListener('click', function() {
-        const audios = document.querySelectorAll('.track-audio');
-        let index = 0;
-    
-        function playNext() {
-            if (index < audios.length) {
-                audios[index].play().then(() => {
-                    audios[index].onended = function() {
-                        index++;
-                        playNext();
-                    };
-                }).catch(err => {
-                    console.error('Error playing audio:', err);
-                    index++;
-                    playNext();
-                });
+    function updateSlidePosition() {
+        const slider = document.querySelector('.slider');
+        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    document.getElementById('next-slide').addEventListener('click', function() {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+            updateSlidePosition();
+        }
+    });
+
+    document.getElementById('prev-slide').addEventListener('click', function() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateSlidePosition();
+        }
+    });
+
+    document.querySelector('.slide-container').addEventListener('wheel', function(event) {
+        event.preventDefault(); // Prevent default scrolling behavior
+        const delta = event.deltaY; // Get scroll direction
+
+        if (delta > 0) {
+            // Scroll down
+            this.scrollBy({
+                top: window.innerHeight, // Scroll one full viewport height
+                behavior: 'smooth' // Smooth scrolling effect
+            });
+        } else {
+            // Scroll up
+            this.scrollBy({
+                top: -window.innerHeight, // Scroll one full viewport height up
+                behavior: 'smooth' // Smooth scrolling effect
+            });
+        }
+    });
+
+    const ctx = document.getElementById('temperatureGauge').getContext('2d');
+    const temperature = {{ temperature }}; // Get temperature value from Django context
+
+    const gauge = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [temperature, 100 - temperature],
+                backgroundColor: ['#4CAF50', 'black'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    display: false
+                }
             }
         }
-    
-        playNext();
     });
+
 </script>
-
-<h3>Top Genres</h3>
-<button id="play-genre-songs">Play Top Genre Songs</button>
-{% for genre, preview_url in genre_songs.items %}
-    <audio class="genre-audio">
-        <source src="{{ preview_url }}" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-{% endfor %}
-<ul>
-    {% if top_genres %}
-        {% for genre in top_genres %}
-            <li>{{ genre }}</li>
-        {% endfor %}
-    {% else %}
-        <p>No top genres available.</p>
-    {% endif %}
-</ul>
-
-<script>
-    document.getElementById('play-genre-songs').addEventListener('click', function() {
-        const audios = document.querySelectorAll('.genre-audio');
-        let index = 0;
-
-        function playNext() {
-            if (index < audios.length) {
-                audios[index].play().then(() => {
-                    audios[index].onended = function() {
-                        index++;
-                        playNext();
-                    };
-                }).catch(err => {
-                    console.error('Error playing audio:', err);
-                    index++;
-                    playNext();
-                });
-            }
-        }
-
-        playNext();
-    });
-</script>
-
-<h3>Average Valence of Top Tracks</h3>
-<p>The average valence of your top tracks for the selected time frame is: {{ average_valence }}</p>
