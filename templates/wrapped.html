@@ -185,90 +185,55 @@
 </div>
 
 <script>
-    document.getElementById('play-artist-songs').addEventListener('click', function() {
-        const audios = document.querySelectorAll('.artist-audio');
-        let index = 0;
+    // Function to play and stop audio based on visibility of the slide
+function playAudioOnSlide(slideIndex, tracksSelector) {
+    const slide = document.querySelectorAll('.slide')[slideIndex]; // Get the slide at the specific index
+    const audios = slide.querySelectorAll(tracksSelector); // Get the audio elements inside the slide
+    let index = 0;
 
-        function playNext() {
-            if (index < audios.length) {
-                audios[index].play().then(() => {
-                    audios[index].onended = function() {
-                        index++;
-                        playNext();
-                    };
-                }).catch(err => {
-                    console.error('Error playing audio:', err);
+    // Play next track function
+    function playNext() {
+        if (index < audios.length) {
+            audios[index].play().then(() => {
+                audios[index].onended = function() {
                     index++;
-                    playNext();
-                });
-            }
+                    playNext(); // Continue playing next track when the current track ends
+                };
+            }).catch(err => {
+                console.error('Error playing audio:', err);
+                index++;
+                playNext(); // Skip to next track if there's an error
+            });
         }
-
-        playNext();
-    });
-
-    const slides = document.querySelectorAll('.slide');
-    let currentSlide = 0;
-
-    function updateSlidePosition() {
-        const slider = document.querySelector('.slider');
-        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
     }
 
-    document.getElementById('next-slide').addEventListener('click', function() {
-        if (currentSlide < slides.length - 1) {
-            currentSlide++;
-            updateSlidePosition();
-        }
-    });
+    // Stop all audios
+    function stopAudio() {
+        audios.forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0; // Reset the audio to the beginning
+        });
+    }
 
-    document.getElementById('prev-slide').addEventListener('click', function() {
-        if (currentSlide > 0) {
-            currentSlide--;
-            updateSlidePosition();
-        }
-    });
-
-    document.querySelector('.slide-container').addEventListener('wheel', function(event) {
-        event.preventDefault(); // Prevent default scrolling behavior
-        const delta = event.deltaY; // Get scroll direction
-
-        if (delta > 0) {
-            // Scroll down
-            this.scrollBy({
-                top: window.innerHeight, // Scroll one full viewport height
-                behavior: 'smooth' // Smooth scrolling effect
-            });
-        } else {
-            // Scroll up
-            this.scrollBy({
-                top: -window.innerHeight, // Scroll one full viewport height up
-                behavior: 'smooth' // Smooth scrolling effect
-            });
-        }
-    });
-
-    const ctx = document.getElementById('temperatureGauge').getContext('2d');
-    const temperature = {{ temperature }}; // Get temperature value from Django context
-
-    const gauge = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [temperature, 100 - temperature],
-                backgroundColor: ['#4CAF50', 'black'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            cutout: '70%',
-            plugins: {
-                legend: {
-                    display: false
-                }
+    // Set up Intersection Observer to trigger playback when the slide is in view and stop when out of view
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) { // If the slide is visible
+                playNext();
+            } else { // If the slide is no longer visible
+                stopAudio();
             }
-        }
-    });
+        });
+    }, { threshold: 0.5 }); // Trigger when 50% of the slide is visible
+
+    observer.observe(slide); // Start observing the slide
+}
+
+// Automatically play top tracks when the slide becomes visible
+playAudioOnSlide(3, '.track-audio'); // Slide index 3 is where the top tracks are
+// Automatically play top artist songs when the slide becomes visible
+playAudioOnSlide(5, '.artist-audio'); // Slide index 5 is where the top artists are
+// Automatically play top genre songs when the slide becomes visible
+playAudioOnSlide(7, '.genre-audio'); // Slide index 7 is where the top genres are
 
 </script>
