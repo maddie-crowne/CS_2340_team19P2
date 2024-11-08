@@ -11,7 +11,10 @@ SPOTIFY_API_URL = "https://api.spotify.com/v1/me"
 
 @login_required
 def user_spotify_login(request):
-    return render(request, 'loginWithSpotify.html', {})
+    return render(request, 'loginWithSpotify.html', {'login_type': 'single'})
+
+def user_spotify_login_duo(request):
+    return render(request, 'loginWithSpotify.html', {'login_type': 'duo'})
 
 @login_required
 def wrapped(request):
@@ -263,4 +266,17 @@ def invite(request):
 
 @login_required
 def duo(request):
-    return render(request, 'wrappedDuo.html', {})
+    # Retrieve the main and duo Spotify profiles from the session
+    main_user_profile = request.session.get('spotify_profile', {})
+    duo_user_profile = request.session.get('duo_spotify_profile', {})
+
+    # Get the usernames (display names) from the profiles
+    main_username = main_user_profile.get('display_name', 'Main User')
+    duo_username = duo_user_profile.get('display_name', 'Duo User')
+
+    # Pass the usernames to the template
+    context = {
+        'main_username': main_username,
+        'duo_username': duo_username,
+    }
+    return render(request, 'wrappedDuo.html', context)

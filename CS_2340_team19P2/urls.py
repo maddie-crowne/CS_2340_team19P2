@@ -25,7 +25,9 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/auth/login/', permanent=False)),
     path('auth/', include('auth.urls')),
     path('spotify/login/', views.spotify_login, name='spotify_login'),
+    path('spotify_login_duo', views.duo_login, name='spotify_login_duo'),
     path('callback/', views.spotify_callback, name='spotify_callback'),
+    path('duo_callback/', views.duo_callback, name='duo_callback'),
     path('wrapped/', include('wrapped.urls')),
     path('contactTheDevelopers', views.contact_developers, name='contactDevelopers'),
 

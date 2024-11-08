@@ -122,9 +122,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'auth/static')]
-SPOTIFY_CLIENT_ID= os.environ.get('SPOTIFY_CLIENT_ID')
-SPOTIFY_CLIENT_SECRET= os.environ.get('SPOTIFY_CLIENT_SECRET')
-SPOTIFY_REDIRECT_URI='http://localhost:8000/callback/'
+SPOTIFY_CLIENT_ID='6319962d960845bc8f1ae7d7a30909bb'
+SPOTIFY_CLIENT_SECRET='4e5be702897f4ee393f7375ae3d964bd'
+SPOTIFY_REDIRECT_URI='http://127.0.0.1:8000/callback/'
+DUO_SPOTIFY_REDIRECT_URI='http://127.0.0.1:8000/duo_callback/'
 
 
 # Default primary key field type

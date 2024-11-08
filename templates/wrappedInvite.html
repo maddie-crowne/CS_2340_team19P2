@@ -1,1 +1,6 @@
 <h1>Wrapped Invite</h1>
+<div style="display: flex; justify-content: center; margin-top: 50px;">
+    <a href="{% url 'spotify_login' %}" style="text-decoration: none;">
+        <button type="button" onclick="window.location.href='{% url 'wrapped:user_spotify_login_duo' %}'" class="spotify-button">Log in with Spotify (Duo)</button>
+    </a>
+</div>
