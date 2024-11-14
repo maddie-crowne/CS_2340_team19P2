@@ -12,5 +12,6 @@ urlpatterns = [
     path('delete-wrap/<int:wrap_id>/', views.delete_wrap, name='delete_wrap'),
     path('select/', views.select, name='select'),
     path('invite/', views.invite, name='invite'),
+    path('spotify/login/', views.duo_spotify_login, name='duo_spotify_login'),
     path('duo/', views.duo, name='duo'),
 ]

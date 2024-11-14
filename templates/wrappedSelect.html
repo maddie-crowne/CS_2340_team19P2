@@ -7,8 +7,9 @@
     <a href="{% url 'wrapped:account' %}">My Account</a>
     <button id="logout-button" onclick="logout()">Logout</button>
 </div>
-<div class="account-info">
-    <a href="{% url 'wrapped:account' %}"></a>
+
+<div class="invite-button">
+    <a href="{% url 'wrapped:invite' %}">Invite</a>
 </div>
 
 <form method="GET" action="{% url 'wrapped:wrapped' %}">

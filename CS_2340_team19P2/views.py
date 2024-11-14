@@ -18,7 +18,8 @@ def spotify_login(request):
         f"&client_id={settings.SPOTIFY_CLIENT_ID}"
         f"&redirect_uri={settings.SPOTIFY_REDIRECT_URI}"
         "&scope=user-read-private user-read-email user-top-read"
-        "&show_dialog=true"  # Add this to force reauthorization
+        "&show_dialog=true"
+        "&state=individual"
     )
     return redirect(auth_url)
 
@@ -66,6 +67,7 @@ def refresh_access_token(request):
 
 def spotify_callback(request):
     code = request.GET.get('code')
+    state = request.GET.get('state')
 
     if code:
         # Exchange the authorization code for an access token
@@ -92,7 +94,10 @@ def spotify_callback(request):
         request.session['spotify_profile'] = profile_data
 
         # Redirect to a select page
-        return redirect('wrapped:select')
+        if state == "duo":
+            return redirect('wrapped:duo')
+        else:
+            return redirect('wrapped:select')
 
     else:
         # Handle the case where the code is missing
