@@ -89,15 +89,16 @@ def spotify_callback(request):
         profile_response = requests.get(SPOTIFY_API_URL, headers=headers)
         profile_data = profile_response.json()
 
-        # Optionally save the access_token and profile data in the session or database
-        request.session['spotify_access_token'] = access_token
-        request.session['spotify_profile'] = profile_data
-
-        # Redirect to a select page
         if state == "duo":
-            return redirect('wrapped:duo')
+            # This is the second user, save their token and profile as "user2"
+            request.session['spotify_access_token_user2'] = access_token
+            request.session['spotify_profile_user2'] = profile_data
+            return redirect('wrapped:duo')  # Redirect to the duo page
         else:
-            return redirect('wrapped:select')
+            # This is the first user, save their token and profile
+            request.session['spotify_access_token'] = access_token
+            request.session['spotify_profile'] = profile_data
+            return redirect('wrapped:select')  # Redirect to the select page (or wherever)
 
     else:
         # Handle the case where the code is missing

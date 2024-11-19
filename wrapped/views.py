@@ -1,4 +1,6 @@
 from collections import Counter
+from statistics import mean
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -263,10 +265,6 @@ def invite(request):
     return render(request, 'wrappedInvite.html', {})
 
 @login_required
-def duo(request):
-    return render(request, 'wrappedDuo.html', {})
-
-@login_required
 # Redirect to Spotify login
 def duo_spotify_login(request):
     auth_url = (
@@ -352,10 +350,154 @@ def spotify_callback(request):
 
         # Redirect to a duo wrapped page
         if state == "duo":
-            return redirect('wrapped:duo')
+            # This is the second user, save their token and profile as "user2"
+            request.session['spotify_access_token_user2'] = access_token
+            request.session['spotify_profile_user2'] = profile_data
+            return redirect('wrapped:duo')  # Redirect to the duo page
         else:
-            return redirect('wrapped:select')
+            # This is the first user, save their token and profile
+            request.session['spotify_access_token'] = access_token
+            request.session['spotify_profile'] = profile_data
+            return redirect('wrapped:select')  # Redirect to the select page
 
     else:
         # Handle the case where the code is missing
         return render(request, 'error.html', {"message": "Failed to authenticate with Spotify"})
+
+@login_required
+def duo(request):
+    access_token_user1 = request.session.get('spotify_access_token')
+    profile_user1 = request.session.get('spotify_profile')
+
+    # Get user's top artists
+    top_artists_url = "https://api.spotify.com/v1/me/top/artists"
+    headers = {"Authorization": f"Bearer {access_token_user1}"}
+    params = {"limit": 50}
+    top_artists_response = requests.get(top_artists_url, headers=headers, params=params)
+
+    if top_artists_response.status_code != 200:
+        return redirect('spotify_login')  # Redirect if we can't fetch the top artists
+
+    top_artists_data_user1 = top_artists_response.json()
+
+    # Get user's top tracks
+    top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
+    top_tracks_response = requests.get(top_tracks_url, headers=headers, params=params)
+
+    if top_tracks_response.status_code != 200:
+        return redirect('spotify_login')  # Redirect if we can't fetch the top tracks
+
+    top_tracks_data_user1 = top_tracks_response.json()
+    track_ids_user1 = [track['id'] for track in top_tracks_data_user1.get('items', []) if track.get('id')]
+
+    # Get audio features for the top tracks
+    audio_features_data_user1 = get_audio_features(access_token_user1, track_ids_user1)
+
+    # Calculate the average values for the requested audio features
+    valence_user1, averages_user1 = calculate_averages(audio_features_data_user1)
+
+    access_token_user2 = request.session.get('spotify_access_token_user2')
+    profile_user2 = request.session.get('spotify_profile_user2')
+
+    # Get user's top artists
+    headers = {"Authorization": f"Bearer {access_token_user2}"}
+    top_artists_response = requests.get(top_artists_url, headers=headers, params=params)
+
+    if top_artists_response.status_code != 200:
+        return redirect('spotify_login')  # Redirect if we can't fetch the top artists
+
+    top_artists_data_user2 = top_artists_response.json()
+
+    # Get user's top tracks
+    top_tracks_response = requests.get(top_tracks_url, headers=headers, params=params)
+
+    if top_tracks_response.status_code != 200:
+        return redirect('spotify_login')  # Redirect if we can't fetch the top tracks
+
+    top_tracks_data_user2 = top_tracks_response.json()
+    track_ids_user2 = [track['id'] for track in top_tracks_data_user2.get('items', []) if track.get('id')]
+
+    # Get audio features for the top tracks
+    audio_features_data_user2 = get_audio_features(access_token_user2, track_ids_user2)
+
+    # Calculate the average values for the requested audio features
+    valence_user2, averages_user2 = calculate_averages(audio_features_data_user2)
+
+    # Calculate compatibility
+    compatibility = calculate_compatibility(top_artists_data_user1, top_tracks_data_user1, averages_user1, top_artists_data_user2, top_tracks_data_user2, averages_user2)
+
+    return render(request, 'wrappedDuo.html', {
+        'user1': profile_user1,
+        'user2': profile_user2,
+        'compatibility': compatibility,
+        'valence_user1': valence_user1,
+        'valence_user2': valence_user2,
+        'top_tracks_user1': top_tracks_data_user1,
+        'top_tracks_user2': top_tracks_data_user2
+    })
+
+# Function to calculate compatibility
+def calculate_compatibility(top_artists_user1, top_tracks_user1, averages_user1, top_artists_user2, top_tracks_user2, averages_user2):
+    # Calculate the percentage of matching artists
+    artists_user1 = set([artist['id'] for artist in top_artists_user1['items']])
+    artists_user2 = set([artist['id'] for artist in top_artists_user2['items']])
+    matching_artists = len(artists_user1.intersection(artists_user2))
+    artist_compatibility = (matching_artists / 50) * 100  # 50 is the limit
+
+    # Calculate the percentage of matching tracks
+    tracks_user1 = set([track['id'] for track in top_tracks_user1['items']])
+    tracks_user2 = set([track['id'] for track in top_tracks_user2['items']])
+    matching_tracks = len(tracks_user1.intersection(tracks_user2))
+    track_compatibility = (matching_tracks / 50) * 100  # 50 is the limit
+
+    # Calculate the percentage of matching audio features
+    feature_compatibility = 0
+    total_features = len(averages_user1)
+    for feature in averages_user1:
+        if abs(averages_user1[feature] - averages_user2[feature]) <= 0.20:
+            feature_compatibility += 1
+
+    feature_compatibility = (feature_compatibility / total_features) * 100
+
+    # Final compatibility score: 30% artists, 30% tracks, 40% audio features
+    total_compatibility = (artist_compatibility * 0.3) + (track_compatibility * 0.3) + (feature_compatibility * 0.4)
+
+    return round(total_compatibility, 2)
+
+# Function to get the audio features of multiple tracks
+def get_audio_features(access_token, track_ids):
+    url = "https://api.spotify.com/v1/audio-features"
+    headers = {"Authorization": f"Bearer {access_token}"}
+    params = {
+        "ids": ','.join(track_ids)
+    }
+    response = requests.get(url, headers=headers, params=params)
+    if response.status_code == 200:
+        return response.json().get("audio_features", [])
+    return []
+
+# Calculate averages for valence, danceability, energy, instrumentalness, and tempo
+def calculate_averages(audio_features_data):
+    features = {
+        'valence': [],
+        'danceability': [],
+        'energy': [],
+        'instrumentalness': [],
+        'tempo': []
+    }
+
+    for feature in audio_features_data:
+        if feature:
+            for key in features.keys():
+                value = feature.get(key)
+                if value is not None:
+                    features[key].append(value)
+
+    averages = {}
+    for key, values in features.items():
+        if values:
+            averages[key] = mean(values)
+        else:
+            averages[key] = 0  # Default to 0 if no values are available
+
+    return averages['valence'], averages

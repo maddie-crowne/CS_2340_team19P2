@@ -1,1 +1,45 @@
 <h1>Wrapped Duo</h1>
+
+<h2>Compatability</h2>
+<p>{{ compatibility }}</p>
+{% if compatibility < 50 %}
+    <p>You two are from different planets</p>
+{% elif compatibility < 80 %}
+    <p>You two might have similar tastes in music</p>
+{% else %}
+    <p>You two might just be the same person</p>
+{% endif %}
+
+<h2>Vibemeter</h2>
+<p>{{ user1.first_name }}</p>
+<p>Valence: {{ valence_user1 }}</p>
+<p>{{ user2.first_name }}</p>
+<p>Valence: {{ valence_user2 }}</p>
+
+<h2>User 1's Top Tracks</h2>
+<ol>
+    {% for track in top_tracks_user1.items|slice:":5" %}
+        <li>
+            {{ track.name }}
+            {% if track.artists %}
+                - {{ track.artists.0.name }}  <!-- Display first artist -->
+            {% else %}
+                - Unknown Artist  <!-- Fallback if no artist data is available -->
+            {% endif %}
+        </li>
+    {% endfor %}
+</ol>
+
+<h2>User 2's Top Tracks</h2>
+<ol>
+    {% for track in top_tracks_user2.items|slice:":5" %}
+        <li>
+            {{ track.name }}
+            {% if track.artists %}
+                - {{ track.artists.0.name }}  <!-- Display first artist -->
+            {% else %}
+                - Unknown Artist  <!-- Fallback if no artist data is available -->
+            {% endif %}
+        </li>
+    {% endfor %}
+</ol>
