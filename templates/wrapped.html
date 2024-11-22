@@ -38,7 +38,7 @@
 <div class="slide-container">
     <div class="slide">
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
-            <h1 style="font-size: 60px;">{{ user_data.first_name }}'s</h1>
+            <h1 style="font-size: 60px;">{{ user_data.display_name }}'s</h1>
             <h1 style="font-size: 60px; margin-top: -40px;">Wrapped</h1>
              <img src="{{ user_data.images.0.url }}" alt="Profile Picture"
                 style="border-radius: 150px; width: 300px;"/>
@@ -73,7 +73,6 @@
     </div>
 
     <div class="slide">
-        <button id="play-tracks">Play Top Tracks</button>
         <div style="width: 40%; margin: auto;">
             <ol id="track-list" style="list-style-position: inside; padding-left: 0;">
                 {% for track in top_tracks.items|slice:":5" %}
@@ -98,13 +97,11 @@
                                 Unknown Artist
                             {% endif %}
                         </div>
-
-                        {% if not forloop.first %}
+                    
                             <audio class="track-audio">
                                 <source src="{{ track.preview_url }}" type="audio/mpeg">
                                 Your browser does not support the audio element.
                             </audio>
-                        {% endif %}
                     </li>
                 {% endfor %}
             </ol>
@@ -120,7 +117,6 @@
     </div>
 
     <div class="slide">
-        <button id="play-artist-songs">Play Top Artist Songs</button>
         {% for artist, preview_url in artist_songs.items %}
             <audio class="artist-audio">
                 <source src="{{ preview_url }}" type="audio/mpeg">
@@ -132,18 +128,20 @@
                 {% if top_artists %}
                     <li style="margin-bottom: 20px;">
                         {% if top_artists.items.0.images.0.url %}
-                            <img src="{{ top_artists.items.0.images.0.url }}" alt="Top Artist Picture" style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 10px;">
+                            <img src="{{ top_artists.items.0.images.0.url }}" alt="Top Artist Picture"
+                                 style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 10px;">
                         {% endif %}
                         <div style="font-size: 1.5em;">{{ top_artists.items.0.name }}</div>
                     </li>
                     <li>
                         <div style="display: flex; justify-content: center; align-items: center;">
-                            {% for artist in top_artists.items|slice:":4" %}
+                            {% for artist in top_artists.items|slice:"1:5" %}
                                 <div style="margin: 0 10px; text-align: center;">
                                     {% if artist.images.0.url %}
-                                        <img src="{{ artist.images.0.url }}" alt="Artist Picture" style="width: 50px; height: 50px; object-fit: cover; margin-bottom: 5px;">
+                                        <img src="{{ artist.images.0.url }}" alt="Artist Picture"
+                                             style="width: 50px; height: 50px; object-fit: cover; margin-bottom: 5px;">
                                     {% endif %}
-                                    <div>{{ forloop.counter }}. {{ artist.name }}</div>
+                                    <div>{{ forloop.counter|add:1 }}. {{ artist.name }}</div>
                                 </div>
                             {% endfor %}
                         </div>
@@ -163,8 +161,14 @@
     </div>
 
     <div class="slide">
+        {% for genre, song_url in genre_songs.items %}
+            <audio class="genre-audio">
+                <source src="{{ song_url }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        {% endfor %}
+    
         <h3 style="text-align: center;">Top Genres</h3>
-        <button id="play-genre-songs" style="display: block; margin: 0 auto;">Play Top Genre Songs</button>
 
         <div style="display: flex; justify-content: center; margin-bottom: 20px;">
             {% if top_genres %}
@@ -192,54 +196,54 @@
 
 <script>
     // Function to play and stop audio based on visibility of the slide
-function playAudioOnSlide(slideIndex, tracksSelector) {
-    const slide = document.querySelectorAll('.slide')[slideIndex]; // Get the slide at the specific index
-    const audios = slide.querySelectorAll(tracksSelector); // Get the audio elements inside the slide
-    let index = 0;
+    function playAudioOnSlide(slideIndex, tracksSelector) {
+        const slide = document.querySelectorAll('.slide')[slideIndex]; // Get the slide at the specific index
+        const audios = slide.querySelectorAll(tracksSelector); // Get the audio elements inside the slide
+        let index = 0;
 
-    // Play next track function
-    function playNext() {
-        if (index < audios.length) {
-            audios[index].play().then(() => {
-                audios[index].onended = function() {
+        // Play next track function
+        function playNext() {
+            if (index < audios.length) {
+                audios[index].play().then(() => {
+                    audios[index].onended = function () {
+                        index++;
+                        playNext(); // Continue playing next track when the current track ends
+                    };
+                }).catch(err => {
+                    console.error('Error playing audio:', err);
                     index++;
-                    playNext(); // Continue playing next track when the current track ends
-                };
-            }).catch(err => {
-                console.error('Error playing audio:', err);
-                index++;
-                playNext(); // Skip to next track if there's an error
+                    playNext(); // Skip to next track if there's an error
+                });
+            }
+        }
+
+        // Stop all audios
+        function stopAudio() {
+            audios.forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0; // Reset the audio to the beginning
             });
         }
+
+        // Set up Intersection Observer to trigger playback when the slide is in view and stop when out of view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { // If the slide is visible
+                    playNext();
+                } else { // If the slide is no longer visible
+                    stopAudio();
+                }
+            });
+        }, {threshold: 0.5}); // Trigger when 50% of the slide is visible
+
+        observer.observe(slide); // Start observing the slide
     }
 
-    // Stop all audios
-    function stopAudio() {
-        audios.forEach(audio => {
-            audio.pause();
-            audio.currentTime = 0; // Reset the audio to the beginning
-        });
-    }
-
-    // Set up Intersection Observer to trigger playback when the slide is in view and stop when out of view
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) { // If the slide is visible
-                playNext();
-            } else { // If the slide is no longer visible
-                stopAudio();
-            }
-        });
-    }, { threshold: 0.5 }); // Trigger when 50% of the slide is visible
-
-    observer.observe(slide); // Start observing the slide
-}
-
-// Automatically play top tracks when the slide becomes visible
-playAudioOnSlide(3, '.track-audio'); // Slide index 3 is where the top tracks are
-// Automatically play top artist songs when the slide becomes visible
-playAudioOnSlide(5, '.artist-audio'); // Slide index 5 is where the top artists are
-// Automatically play top genre songs when the slide becomes visible
-playAudioOnSlide(7, '.genre-audio'); // Slide index 7 is where the top genres are
+    // Automatically play top tracks when the slide becomes visible
+    playAudioOnSlide(3, '.track-audio'); // Slide index 3 is where the top tracks are
+    // Automatically play top artist songs when the slide becomes visible
+    playAudioOnSlide(5, '.artist-audio'); // Slide index 5 is where the top artists are
+    // Automatically play top genre songs when the slide becomes visible
+    playAudioOnSlide(7, '.genre-audio'); // Slide index 7 is where the top genres are
 
 </script>

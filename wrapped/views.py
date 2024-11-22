@@ -224,6 +224,7 @@ def get_spotify_top_data(access_token, time_range):
                     break  # Exit the loop after checking the first matching artist
 
             if genre in genre_songs:
+                print(genre_songs[genre])
                 break  # Exit the genre loop if a song was found
 
     return top_artists, genre_list, top_tracks_data, average_valence, ordered_artist_songs, genre_songs
