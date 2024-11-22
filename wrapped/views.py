@@ -38,7 +38,7 @@ def wrapped(request):
         top_tracks=top_tracks_data,
         top_genres=top_genres_data,
         genre_songs=genre_songs,
-        average_valence=average_valence,
+        average_valence=round(average_valence * 100),
         time_range=time_range
     )
     saved_wrap.save()
@@ -50,7 +50,7 @@ def wrapped(request):
         'top_tracks': top_tracks_data,
         'top_genres': top_genres_data,
         'genre_songs': genre_songs,
-        'average_valence': average_valence,
+        'average_valence': round(average_valence * 100),
         'selected_time_range': time_range
     })
 
@@ -59,15 +59,12 @@ def view_saved_wrap(request, wrap_id):
     # Get the specific saved wrap by ID
     wrap = get_object_or_404(SaveWrap, id=wrap_id, user=request.user)  # Ensure it's the current user's wrap
 
-    # Get the user data (this will be the current user from the request)
-    user_data = request.user  # User data from the authenticated user
-
     # Get the time range from the request, default to the wrap's time range if not provided
     time_range = request.GET.get('time_range', wrap.time_range)
 
     # Prepare context to pass to the template
     context = {
-        'user_data': user_data,
+        'user_data': wrap.user_data,
         'top_artists': wrap.top_artists,
         'artist_songs': wrap.artist_songs,
         'top_tracks': wrap.top_tracks,
@@ -430,9 +427,9 @@ def duo(request):
     return render(request, 'wrappedDuo.html', {
         'user1': profile_user1,
         'user2': profile_user2,
-        'compatibility': compatibility,
-        'valence_user1': valence_user1,
-        'valence_user2': valence_user2,
+        'compatibility': round(compatibility),
+        'valence_user1': round(valence_user1 * 100),
+        'valence_user2': round(valence_user2 * 100),
         'top_tracks_user1': top_tracks_data_user1,
         'top_tracks_user2': top_tracks_data_user2
     })
@@ -463,7 +460,7 @@ def calculate_compatibility(top_artists_user1, top_tracks_user1, averages_user1,
     # Final compatibility score: 30% artists, 30% tracks, 40% audio features
     total_compatibility = (artist_compatibility * 0.3) + (track_compatibility * 0.3) + (feature_compatibility * 0.4)
 
-    return round(total_compatibility, 2)
+    return total_compatibility
 
 # Function to get the audio features of multiple tracks
 def get_audio_features(access_token, track_ids):

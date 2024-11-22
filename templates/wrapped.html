@@ -19,19 +19,7 @@
         padding: 20px; /* Optional padding */
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
     }
-
-    progress {
-        width: 100%; /* Full width */
-        background-color: black; /* Background of the progress bar */
-        border-radius: 5px; /* Rounded corners */
-    }
-
-    .progress-bar {
-        height: 20px; /* Height of the progress */
-        background-color: #4CAF50; /* Color of the filled part */
-        width: {{ temperature }}%; /* Width based on temperature */
-        border-radius: 5px; /* Rounded corners */
-    }
+    
 </style>
 
 
@@ -54,12 +42,17 @@
     </div>
 
     <div class="slide">
-        <h2>Average Valence of Top Tracks</h2>
-        <p>The average valence of your top tracks for the selected time frame is: {{ average_valence }}</p>
-        <p>Temperature: {{ temperature }}</p>
-        <div class="progress">
-            <div class="progress-bar"></div> <!-- This is the filled part of the bar -->
-        </div>
+        <h2>Vibemeter</h2>
+        <p>{{ average_valence }}°F</p>
+        {% if average_valence <= 25 %}
+            <h2>Your beats have MELANCHOLY vibes</h2>
+        {% elif average_valence <= 50 %}
+            <h2>Your beats have CHILL vibes</h2>
+        {% elif average_valence <= 75 %}
+            <h2>Your beats have PLEASANT vibes</h2>
+        {% else %}
+            <h2>Your beats have HYPE vibes</h2>
+        {% endif %}
     </div>
 
     <div class="slide" style="align-items: flex-end; padding-right: 50px;">
@@ -156,7 +149,7 @@
     <div class="slide" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
         <div style="text-align: center;">
             <h1 style="font-size: 125px;">Favorite</h1>
-            <h1 style="font-size: 125px; margin-top: -50px;">Genre</h1>
+            <h1 style="font-size: 125px; margin-top: -50px;">Genres</h1>
         </div>
     </div>
 

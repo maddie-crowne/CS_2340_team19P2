@@ -1,7 +1,7 @@
 <h1>Wrapped Duo</h1>
 
 <h2>Compatability</h2>
-<p>{{ compatibility }}</p>
+<p>{{ compatibility }}%</p>
 {% if compatibility < 50 %}
     <p>You two are from different planets</p>
 {% elif compatibility < 80 %}
@@ -11,10 +11,31 @@
 {% endif %}
 
 <h2>Vibemeter</h2>
-<p>{{ user1.first_name }}</p>
-<p>Valence: {{ valence_user1 }}</p>
-<p>{{ user2.first_name }}</p>
-<p>Valence: {{ valence_user2 }}</p>
+<p>{{ user1.display_name }}</p>
+<p>{{ valence_user1 }}°F</p>
+{% if valence_user1 <= 25 %}
+    <p>MELANCHOLY vibes</p>
+{% elif valence_user1 <= 50 %}
+    <p>CHILL vibes</p>
+{% elif valence_user1 <= 75 %}
+    <p>PLEASANT vibes</p>
+{% else %}
+    <p>HYPE vibes</p>
+{% endif %}
+
+<br>
+
+<p>{{ user2.display_name }}</p>
+<p>{{ valence_user2 }}°F</p>
+{% if average_valence <= 25 %}
+    <p>Your beats have MELANCHOLY vibes</p>
+{% elif valence_user2 <= 50 %}
+    <p>Your beats have CHILL vibes</p>
+{% elif valence_user2 <= 75 %}
+    <p>Your beats have PLEASANT vibes</p>
+{% else %}
+    <p>Your beats have HYPE vibes</p>
+{% endif %}
 
 <h2>User 1's Top Tracks</h2>
 <ol>
