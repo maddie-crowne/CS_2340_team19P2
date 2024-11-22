@@ -1,66 +1,178 @@
-<h1>Wrapped Duo</h1>
+<style>
+    body {
+        overflow: hidden; /* Prevents the main scrollbar from showing */
+    }
 
-<h2>Compatability</h2>
-<p>{{ compatibility }}%</p>
-{% if compatibility < 50 %}
-    <p>You two are from different planets</p>
-{% elif compatibility < 80 %}
-    <p>You two might have similar tastes in music</p>
-{% else %}
-    <p>You two might just be the same person</p>
-{% endif %}
+    .slide-container {
+        display: flex;
+        flex-direction: column; /* Stack slides vertically */
+        height: 100vh; /* Full viewport height */
+        overflow-y: scroll; /* Enable vertical scrolling */
+    }
 
-<h2>Vibemeter</h2>
-<p>{{ user1.display_name }}</p>
-<p>{{ valence_user1 }}°F</p>
-{% if valence_user1 <= 25 %}
-    <p>MELANCHOLY vibes</p>
-{% elif valence_user1 <= 50 %}
-    <p>CHILL vibes</p>
-{% elif valence_user1 <= 75 %}
-    <p>PLEASANT vibes</p>
-{% else %}
-    <p>HYPE vibes</p>
-{% endif %}
+    .slide {
+        flex: 0 0 100%; /* Each slide takes full height */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Center content vertically */
+        align-items: center; /* Center content horizontally */
+        padding: 20px; /* Optional padding */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+    }
+</style>
 
-<br>
+<div class="slide-container">
 
-<p>{{ user2.display_name }}</p>
-<p>{{ valence_user2 }}°F</p>
-{% if average_valence <= 25 %}
-    <p>Your beats have MELANCHOLY vibes</p>
-{% elif valence_user2 <= 50 %}
-    <p>Your beats have CHILL vibes</p>
-{% elif valence_user2 <= 75 %}
-    <p>Your beats have PLEASANT vibes</p>
-{% else %}
-    <p>Your beats have HYPE vibes</p>
-{% endif %}
+    <div class="slide">
+        <h1>Wrapped Duo</h1>
+    </div>
 
-<h2>User 1's Top Tracks</h2>
-<ol>
-    {% for track in top_tracks_user1.items|slice:":5" %}
-        <li>
-            {{ track.name }}
-            {% if track.artists %}
-                - {{ track.artists.0.name }}  <!-- Display first artist -->
+    <div class="slide">
+        <h2>Compatability</h2>
+        <p>{{ compatibility }}%</p>
+        {% if compatibility < 50 %}
+            <p>You two are from different planets</p>
+        {% elif compatibility < 80 %}
+            <p>You two might have similar tastes in music</p>
+        {% else %}
+            <p>You two might just be the same person</p>
+        {% endif %}
+    </div>
+
+    <div class="slide">
+        <h2>Vibemeter</h2>
+        <p>{{ user1.display_name }}</p>
+        <p>{{ valence_user1 }}°F</p>
+        {% if valence_user1 <= 25 %}
+            <p>MELANCHOLY vibes</p>
+        {% elif valence_user1 <= 50 %}
+            <p>CHILL vibes</p>
+        {% elif valence_user1 <= 75 %}
+            <p>PLEASANT vibes</p>
+        {% else %}
+            <p>HYPE vibes</p>
+        {% endif %}
+
+        <br>
+
+        <p>{{ user2.display_name }}</p>
+        <p>{{ valence_user2 }}°F</p>
+        {% if average_valence <= 25 %}
+            <p>Your beats have MELANCHOLY vibes</p>
+        {% elif valence_user2 <= 50 %}
+            <p>Your beats have CHILL vibes</p>
+        {% elif valence_user2 <= 75 %}
+            <p>Your beats have PLEASANT vibes</p>
+        {% else %}
+            <p>Your beats have HYPE vibes</p>
+        {% endif %}
+    </div>
+
+    <div class="slide" style="align-items: flex-end; padding-right: 50px;">
+        <div style="width: 20%; text-align: right; margin-right: 100px;">
+            <h1 style="font-size: 125px;">Top</h1>
+            <h1 style="font-size: 175px; margin-top: -75px; margin-bottom: -100px;">5</h1>
+            <h1 style="font-size: 125px;">Tracks</h1>
+        </div>
+    </div>
+
+    <div class="slide">
+        {% for song_url in interleaved_preview_urls %}
+            {% if song_url %}
+                <audio class="track-audio">
+                    <source src="{{ song_url }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             {% else %}
-                - Unknown Artist  <!-- Fallback if no artist data is available -->
+                <p>No preview available for this track.</p>
             {% endif %}
-        </li>
-    {% endfor %}
-</ol>
+        {% endfor %}
 
-<h2>User 2's Top Tracks</h2>
-<ol>
-    {% for track in top_tracks_user2.items|slice:":5" %}
-        <li>
-            {{ track.name }}
-            {% if track.artists %}
-                - {{ track.artists.0.name }}  <!-- Display first artist -->
-            {% else %}
-                - Unknown Artist  <!-- Fallback if no artist data is available -->
-            {% endif %}
-        </li>
-    {% endfor %}
-</ol>
+        <h2>User 1's Top Tracks</h2>
+        <ol>
+            {% for track in top_tracks_user1.items|slice:":5" %}
+                <li>
+                    {{ track.name }}
+                    {% if track.artists %}
+                        - {{ track.artists.0.name }}  <!-- Display first artist -->
+                    {% else %}
+                        - Unknown Artist  <!-- Fallback if no artist data is available -->
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+
+        <h2>User 2's Top Tracks</h2>
+
+        <ol>
+            {% for track in top_tracks_user2.items|slice:":5" %}
+                <li>
+                    {{ track.name }}
+                    {% if track.artists %}
+                        - {{ track.artists.0.name }}  <!-- Display first artist -->
+                    {% else %}
+                        - Unknown Artist  <!-- Fallback if no artist data is available -->
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
+
+<script>
+    // Function to play and stop audio based on visibility of the slide
+    function playAudioOnSlide(slideIndex, tracksSelector) {
+        const slide = document.querySelectorAll('.slide')[slideIndex]; // Get the slide at the specific index
+
+// Check if the slide element exists
+        if (!slide) {
+            console.error(`Slide at index ${slideIndex} not found.`);
+            return; // Exit early if the slide doesn't exist
+        }
+
+        const audios = slide.querySelectorAll(tracksSelector); // Get the audio elements inside the slide
+        console.log(audios); // Log the audio elements
+
+        let index = 0;
+
+        // Play next track function
+        function playNext() {
+            if (index < audios.length) {
+                audios[index].play().then(() => {
+                    audios[index].onended = function () {
+                        index++;
+                        playNext(); // Continue playing next track when the current track ends
+                    };
+                }).catch(err => {
+                    console.error('Error playing audio:', err);
+                    index++;
+                    playNext(); // Skip to next track if there's an error
+                });
+            }
+        }
+
+        // Stop all audios
+        function stopAudio() {
+            audios.forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0; // Reset the audio to the beginning
+            });
+        }
+
+        // Set up Intersection Observer to trigger playback when the slide is in view and stop when out of view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { // If the slide is visible
+                    playNext();
+                } else { // If the slide is no longer visible
+                    stopAudio();
+                }
+            });
+        }, {threshold: 0.5}); // Trigger when 50% of the slide is visible
+
+        observer.observe(slide); // Start observing the slide
+    }
+
+    // Automatically play top tracks when the slide becomes visible
+    playAudioOnSlide(4, '.track-audio'); // Slide index 5 is where the top tracks are
+</script>

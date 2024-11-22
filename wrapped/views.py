@@ -388,6 +388,10 @@ def duo(request):
     top_tracks_data_user1 = top_tracks_response.json()
     track_ids_user1 = [track['id'] for track in top_tracks_data_user1.get('items', []) if track.get('id')]
 
+    # Get top 5 tracks preview URLs for user 1
+    top_5_tracks_user1 = top_tracks_data_user1['items'][:5]  # Get the top 5 tracks
+    preview_urls_user1 = [track['preview_url'] for track in top_5_tracks_user1]
+
     # Get audio features for the top tracks
     audio_features_data_user1 = get_audio_features(access_token_user1, track_ids_user1)
 
@@ -415,6 +419,10 @@ def duo(request):
     top_tracks_data_user2 = top_tracks_response.json()
     track_ids_user2 = [track['id'] for track in top_tracks_data_user2.get('items', []) if track.get('id')]
 
+    # Get top 5 tracks preview URLs for user 1
+    top_5_tracks_user2 = top_tracks_data_user2['items'][:5]  # Get the top 5 tracks
+    preview_urls_user2 = [track['preview_url'] for track in top_5_tracks_user2]
+
     # Get audio features for the top tracks
     audio_features_data_user2 = get_audio_features(access_token_user2, track_ids_user2)
 
@@ -424,6 +432,14 @@ def duo(request):
     # Calculate compatibility
     compatibility = calculate_compatibility(top_artists_data_user1, top_tracks_data_user1, averages_user1, top_artists_data_user2, top_tracks_data_user2, averages_user2)
 
+    # Interleave the preview URLs of the top 5 tracks of each user
+    interleaved_preview_urls = []
+    for i in range(5):
+        if i < len(preview_urls_user1):
+            interleaved_preview_urls.append(preview_urls_user1[i])
+        if i < len(preview_urls_user2):
+            interleaved_preview_urls.append(preview_urls_user2[i])
+
     return render(request, 'wrappedDuo.html', {
         'user1': profile_user1,
         'user2': profile_user2,
@@ -431,7 +447,8 @@ def duo(request):
         'valence_user1': round(valence_user1 * 100),
         'valence_user2': round(valence_user2 * 100),
         'top_tracks_user1': top_tracks_data_user1,
-        'top_tracks_user2': top_tracks_data_user2
+        'top_tracks_user2': top_tracks_data_user2,
+        'interleaved_preview_urls': interleaved_preview_urls
     })
 
 # Function to calculate compatibility
