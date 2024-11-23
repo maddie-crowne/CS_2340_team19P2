@@ -6,16 +6,18 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
-from wrapped.models import SaveWrap
+from wrapped.models import SaveWrap, SaveDuoWrap
 import requests
 
 SPOTIFY_API_URL = "https://api.spotify.com/v1/me"
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
+
 @login_required
 def user_spotify_login(request):
     return render(request, 'loginWithSpotify.html', {})
+
 
 @login_required
 def wrapped(request):
@@ -27,7 +29,8 @@ def wrapped(request):
     time_range = request.GET.get('time_range', 'medium_term')
 
     user_data = get_spotify_user_info(access_token)
-    top_artists_data, top_genres_data, top_tracks_data, average_valence, artist_songs, genre_songs = get_spotify_top_data(access_token, time_range)
+    top_artists_data, top_genres_data, top_tracks_data, average_valence, artist_songs, genre_songs = get_spotify_top_data(
+        access_token, time_range)
 
     # Save the wrap data automatically upon loading
     saved_wrap = SaveWrap(
@@ -54,6 +57,7 @@ def wrapped(request):
         'selected_time_range': time_range
     })
 
+
 @login_required
 def view_saved_wrap(request, wrap_id):
     # Get the specific saved wrap by ID
@@ -77,6 +81,7 @@ def view_saved_wrap(request, wrap_id):
     # Render the wrapped.html template with the context data
     return render(request, 'wrapped.html', context)
 
+
 def get_spotify_user_info(access_token):
     headers = {
         'Authorization': f'Bearer {access_token}',
@@ -84,6 +89,7 @@ def get_spotify_user_info(access_token):
     }
     response = requests.get(f"{SPOTIFY_API_URL}", headers=headers)
     return response.json()
+
 
 def get_spotify_top_data(access_token, time_range):
     # Top Artists
@@ -226,6 +232,7 @@ def get_spotify_top_data(access_token, time_range):
 
     return top_artists, genre_list, top_tracks_data, average_valence, ordered_artist_songs, genre_songs
 
+
 def get_artist_songs(access_token, artist_id):
     url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks"
     headers = {"Authorization": f"Bearer {access_token}"}
@@ -235,17 +242,21 @@ def get_artist_songs(access_token, artist_id):
     response = requests.get(url, headers=headers, params=params)
     return response.json().get("tracks", [])
 
+
 @login_required
 def account(request):
     user = request.user
     saved = SaveWrap.objects.filter(user=user)
+    duo_saved = SaveDuoWrap.objects.filter(user=user)
 
     context = {
         'user': user,
         'saved': saved,
+        'duo_saved': duo_saved
     }
 
     return render(request, 'accountInfo.html', context)
+
 
 @login_required
 def delete_wrap(request, wrap_id):
@@ -254,13 +265,24 @@ def delete_wrap(request, wrap_id):
         wrap.delete()
         return redirect('wrapped:account')
 
+
+@login_required
+def delete_duo_wrap(request, wrap_id):
+    if request.method == 'POST':
+        wrap = SaveDuoWrap.objects.get(id=wrap_id, user=request.user)
+        wrap.delete()
+        return redirect('wrapped:account')
+
+
 @login_required
 def select(request):
     return render(request, 'wrappedSelect.html', {})
 
+
 @login_required
 def invite(request):
     return render(request, 'wrappedInvite.html', {})
+
 
 @login_required
 # Redirect to Spotify login
@@ -276,6 +298,7 @@ def duo_spotify_login(request):
     )
     return redirect(auth_url)
 
+
 # View user account info with Spotify data
 def get_spotify_token(auth_code):
     token_url = "https://accounts.spotify.com/api/token"
@@ -289,6 +312,7 @@ def get_spotify_token(auth_code):
     })
 
     return response.json()
+
 
 def refresh_access_token(request):
     refresh_token = request.session.get('refresh_token')
@@ -317,6 +341,7 @@ def refresh_access_token(request):
     request.session['access_token'] = access_token
 
     return JsonResponse({'access_token': access_token})
+
 
 def spotify_callback(request):
     code = request.GET.get('code')
@@ -361,6 +386,7 @@ def spotify_callback(request):
     else:
         # Handle the case where the code is missing
         return render(request, 'error.html', {"message": "Failed to authenticate with Spotify"})
+
 
 @login_required
 def duo(request):
@@ -430,7 +456,8 @@ def duo(request):
     valence_user2, averages_user2 = calculate_averages(audio_features_data_user2)
 
     # Calculate compatibility
-    compatibility = calculate_compatibility(top_artists_data_user1, top_tracks_data_user1, averages_user1, top_artists_data_user2, top_tracks_data_user2, averages_user2)
+    compatibility = calculate_compatibility(top_artists_data_user1, top_tracks_data_user1, averages_user1,
+                                            top_artists_data_user2, top_tracks_data_user2, averages_user2)
 
     # Interleave the preview URLs of the top 5 tracks of each user
     interleaved_preview_urls = []
@@ -439,6 +466,20 @@ def duo(request):
             interleaved_preview_urls.append(preview_urls_user1[i])
         if i < len(preview_urls_user2):
             interleaved_preview_urls.append(preview_urls_user2[i])
+
+    # Save the wrap data automatically upon loading
+    saved_wrap = SaveDuoWrap(
+        user=request.user,
+        user1_data=profile_user1,
+        user2_data=profile_user2,
+        compatibility=round(compatibility),
+        valence_user1=round(valence_user1 * 100),
+        valence_user2=round(valence_user2 * 100),
+        top_tracks_user1=top_tracks_data_user1,
+        top_tracks_user2=top_tracks_data_user2,
+        interleaved_preview_urls=interleaved_preview_urls
+    )
+    saved_wrap.save()
 
     return render(request, 'wrappedDuo.html', {
         'user1': profile_user1,
@@ -451,8 +492,10 @@ def duo(request):
         'interleaved_preview_urls': interleaved_preview_urls
     })
 
+
 # Function to calculate compatibility
-def calculate_compatibility(top_artists_user1, top_tracks_user1, averages_user1, top_artists_user2, top_tracks_user2, averages_user2):
+def calculate_compatibility(top_artists_user1, top_tracks_user1, averages_user1, top_artists_user2, top_tracks_user2,
+                            averages_user2):
     # Calculate the percentage of matching artists
     artists_user1 = set([artist['id'] for artist in top_artists_user1['items']])
     artists_user2 = set([artist['id'] for artist in top_artists_user2['items']])
@@ -479,6 +522,7 @@ def calculate_compatibility(top_artists_user1, top_tracks_user1, averages_user1,
 
     return total_compatibility
 
+
 # Function to get the audio features of multiple tracks
 def get_audio_features(access_token, track_ids):
     url = "https://api.spotify.com/v1/audio-features"
@@ -490,6 +534,7 @@ def get_audio_features(access_token, track_ids):
     if response.status_code == 200:
         return response.json().get("audio_features", [])
     return []
+
 
 # Calculate averages for valence, danceability, energy, instrumentalness, and tempo
 def calculate_averages(audio_features_data):
@@ -516,3 +561,24 @@ def calculate_averages(audio_features_data):
             averages[key] = 0  # Default to 0 if no values are available
 
     return averages['valence'], averages
+
+
+@login_required
+def view_saved_duo_wrap(request, wrap_id):
+    # Get the specific saved wrap by ID
+    wrap = get_object_or_404(SaveDuoWrap, id=wrap_id, user=request.user)  # Ensure it's the current user's wrap
+
+    # Prepare context to pass to the template
+    context = {
+        'user1_data': wrap.user1_data,
+        'user2_data': wrap.user2_data,
+        'compatibility': wrap.compatibility,
+        'valence_user1': wrap.valence_user1,
+        'valence_user2': wrap.valence_user2,
+        'top_tracks_user1': wrap.top_tracks_user1,
+        'top_tracks_user2': wrap.top_tracks_user2,
+        'interleaved_preview_urls': wrap.interleaved_preview_urls
+    }
+
+    # Render the wrapped.html template with the context data
+    return render(request, 'wrappedDuo.html', context)

@@ -5,12 +5,12 @@
     <div class="name">
         <p><span class="info-label"></span> {{ user.first_name }} {{ user.last_name }}</p>
     </div>
-    
+
     <div class="account-info">
         <p><span class="info-label">Username:</span> {{ user.username }}</p>
         <p><span class="info-label">Email:</span> {{ user.email }}</p>
     </div>
-    
+
     <!-- Delete Account Form -->
     <form action="{% url 'auth:delete_account' %}" method="POST"
           onsubmit="return confirm('Are you sure you want to delete your account?');">
@@ -20,96 +20,123 @@
 </div>
 
 <div class="saved-wraps">
-    <h1>Your Favorite Wraps</h1>
-    <ul class="saved-individual-wraps">
-        {% for wrap in saved %}
-            <li>
-                <a href="{% url 'wrapped:view_saved_wrap' wrap.id %}?time_range={{ wrap.time_range }}">
-                    {% if wrap.time_range == 'short_term' %}
-                        <p>Monthly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
-                    {% elif wrap.time_range == 'medium_term' %}
-                        <p>6 Month Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
-                    {% elif wrap.time_range == 'long_term' %}
-                        <p>Yearly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
-                    {% endif %}
-                </a>
-            
-                <!-- Delete Button -->
-                <form action="{% url 'wrapped:delete_wrap' wrap.id %}" method="POST"
-                      onsubmit="return confirm('Are you sure you want to unsave this wrap?');">
-                    {% csrf_token %}
-                    <button type="submit" class="delete-wrap-button">Delete</button>
-                </form>
-            </li>
-        {% empty %}
-            <li>No favorite wraps found.</li>
-        {% endfor %}
-    </ul>
+    <div class="saved-individual-wraps">
+        <h1>Saved Wraps</h1>
+        <ul>
+            {% for wrap in saved %}
+                <li>
+                    <a href="{% url 'wrapped:view_saved_wrap' wrap.id %}?time_range={{ wrap.time_range }}">
+                        {% if wrap.time_range == 'short_term' %}
+                            <p>Monthly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
+                        {% elif wrap.time_range == 'medium_term' %}
+                            <p>6 Month Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
+                        {% elif wrap.time_range == 'long_term' %}
+                            <p>Yearly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></p>
+                        {% endif %}
+                    </a>
+
+                    <!-- Delete Button -->
+                    <form action="{% url 'wrapped:delete_wrap' wrap.id %}" method="POST"
+                          onsubmit="return confirm('Are you sure you want to unsave this wrap?');">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-wrap-button">Delete</button>
+                    </form>
+                </li>
+            {% empty %}
+                <li>No favorite wraps found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="saved-duo-wraps">
+        <h1>Saved Duo Wraps</h1>
+        <ul>
+            {% for wrap in duo_saved %}
+                <li>
+                    <a href="{% url 'wrapped:view_saved_duo_wrap' wrap.id %}">
+                        <p>{{ wrap.user1_data.display_name }} and {{ wrap.user2_data.display_name }}'s
+                            Wrap: {{ wrap.created_at|date:"F d, Y" }}</p>
+                    </a>
+
+                    <!-- Delete Button -->
+                    <form action="{% url 'wrapped:delete_duo_wrap' wrap.id %}" method="POST"
+                          onsubmit="return confirm('Are you sure you want to unsave this wrap?');">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-wrap-button">Delete</button>
+                    </form>
+                </li>
+            {% empty %}
+                <li>No favorite wraps found.</li>
+            {% endfor %}
+        </ul>
+
+    </div>
 </div>
 
+
 <script>
-// Array of month names
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    // Array of month names
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-// Function to parse non-standard date formats (like "Nov. 2, 2024, 2:11 p.m.")
-function parseCustomDate(dateString) {
-    // Extract the date portion (e.g., "Nov. 2, 2024") and remove the time
-    const datePart = dateString.split(',')[0];
-    
-    // Replace month abbreviation with full month name (if needed)
-    const monthAbbr = datePart.split(' ')[0].replace('.', '');
-    const monthIndex = months.findIndex(month => month.toLowerCase().startsWith(monthAbbr.toLowerCase()));
+    // Function to parse non-standard date formats (like "Nov. 2, 2024, 2:11 p.m.")
+    function parseCustomDate(dateString) {
+        // Extract the date portion (e.g., "Nov. 2, 2024") and remove the time
+        const datePart = dateString.split(',')[0];
 
-    // Extract the year
-    const year = dateString.split(',')[1].trim();  // The part after the comma (e.g., "2024")
+        // Replace month abbreviation with full month name (if needed)
+        const monthAbbr = datePart.split(' ')[0].replace('.', '');
+        const monthIndex = months.findIndex(month => month.toLowerCase().startsWith(monthAbbr.toLowerCase()));
 
-    // Formatted date string with full month name, day, and year
-    const formattedDate = `${months[monthIndex]} ${datePart.split(' ')[1]}, ${year}`;
-    return new Date(formattedDate);
-}
+        // Extract the year
+        const year = dateString.split(',')[1].trim();  // The part after the comma (e.g., "2024")
 
-// Function to get month range
-function getMonthRange(createdAt, timeRange) {
-    const createdDate = parseCustomDate(createdAt);
-    const currentMonth = createdDate.getMonth();
-    const currentYear = createdDate.getFullYear();
-
-    let startMonth, endMonth, startYear, endYear;
-
-    if (timeRange === 'short_term') {
-        // Monthly wrapped
-        startMonth = (currentMonth - 1 + 12) % 12;  // 5 months before
-        startYear = currentYear - (currentMonth - 1 < 0 ? 1 : 0); // Adjust year if needed
-        endMonth = currentMonth;
-        endYear = currentYear;
-    } else if (timeRange === 'medium_term') {
-        // 6 months wrapped
-        startMonth = (currentMonth - 5 + 12) % 12;  // 5 months before
-        startYear = currentYear - (currentMonth - 5 < 0 ? 1 : 0); // Adjust year if needed
-        endMonth = currentMonth;
-        endYear = currentYear;
-    } else if (timeRange === 'long_term') {
-        // Yearly wrapped
-        startMonth = (currentMonth - 12 + 12) % 12;  // 5 months before
-        startYear = currentYear - (currentMonth - 12 < 0 ? 1 : 0); // Adjust year if needed
-        endMonth = currentMonth;
-        endYear = currentYear;
+        // Formatted date string with full month name, day, and year
+        const formattedDate = `${months[monthIndex]} ${datePart.split(' ')[1]}, ${year}`;
+        return new Date(formattedDate);
     }
 
-    // Format months and years for display
-    const startMonthName = months[startMonth];
-    const endMonthName = months[endMonth];
+    // Function to get month range
+    function getMonthRange(createdAt, timeRange) {
+        const createdDate = parseCustomDate(createdAt);
+        const currentMonth = createdDate.getMonth();
+        const currentYear = createdDate.getFullYear();
 
-    return `${startMonthName} ${startYear} - ${endMonthName} ${endYear}`;
-}
+        let startMonth, endMonth, startYear, endYear;
 
-// Add the month range to each "month-range" span
-document.querySelectorAll('.month-range').forEach(function(element) {
-    const createdAt = element.getAttribute('data-created-at');
-    const timeRange = element.closest('li').querySelector('p').textContent.trim().toLowerCase().includes('monthly') ? 'short_term' :
-                      element.closest('li').querySelector('p').textContent.trim().toLowerCase().includes('6 month') ? 'medium_term' :
-                      'long_term';
-    const monthRange = getMonthRange(createdAt, timeRange);
-    element.textContent = monthRange;
-});
+        if (timeRange === 'short_term') {
+            // Monthly wrapped
+            startMonth = (currentMonth - 1 + 12) % 12;  // 5 months before
+            startYear = currentYear - (currentMonth - 1 < 0 ? 1 : 0); // Adjust year if needed
+            endMonth = currentMonth;
+            endYear = currentYear;
+        } else if (timeRange === 'medium_term') {
+            // 6 months wrapped
+            startMonth = (currentMonth - 5 + 12) % 12;  // 5 months before
+            startYear = currentYear - (currentMonth - 5 < 0 ? 1 : 0); // Adjust year if needed
+            endMonth = currentMonth;
+            endYear = currentYear;
+        } else if (timeRange === 'long_term') {
+            // Yearly wrapped
+            startMonth = (currentMonth - 12 + 12) % 12;  // 5 months before
+            startYear = currentYear - (currentMonth - 12 < 0 ? 1 : 0); // Adjust year if needed
+            endMonth = currentMonth;
+            endYear = currentYear;
+        }
+
+        // Format months and years for display
+        const startMonthName = months[startMonth];
+        const endMonthName = months[endMonth];
+
+        return `${startMonthName} ${startYear} - ${endMonthName} ${endYear}`;
+    }
+
+    // Add the month range to each "month-range" span
+    document.querySelectorAll('.month-range').forEach(function (element) {
+        const createdAt = element.getAttribute('data-created-at');
+        const timeRange = element.closest('li').querySelector('p').textContent.trim().toLowerCase().includes('monthly') ? 'short_term' :
+            element.closest('li').querySelector('p').textContent.trim().toLowerCase().includes('6 month') ? 'medium_term' :
+                'long_term';
+        const monthRange = getMonthRange(createdAt, timeRange);
+        element.textContent = monthRange;
+    });
 </script>
