@@ -16,4 +16,5 @@ urlpatterns = [
     path('invite/', views.invite, name='invite'),
     path('spotify/login/', views.duo_spotify_login, name='duo_spotify_login'),
     path('duo/', views.duo, name='duo'),
+    path('contactTheDevelopers', views.contact_developers, name='contact_developers'),  # Updated here
 ]
