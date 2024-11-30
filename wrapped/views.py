@@ -503,10 +503,10 @@ def duo(request):
 
     # Interleave the preview URLs of the top 5 tracks of each user
     interleaved_preview_urls = []
-    for i in range(5):
+    for i in range(3):
         if i < len(preview_urls_user1):
             interleaved_preview_urls.append(preview_urls_user1[i])
-        if i < len(preview_urls_user2):
+        if i < len(preview_urls_user2) and i < 2:
             interleaved_preview_urls.append(preview_urls_user2[i])
 
     user1_profile_pic = profile_user1.get('images', [{}])[0].get('url',
