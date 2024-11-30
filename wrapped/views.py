@@ -276,7 +276,16 @@ def delete_duo_wrap(request, wrap_id):
 
 @login_required
 def select(request):
-    return render(request, 'wrappedSelect.html', {})
+    access_token = request.session.get('spotify_access_token')
+
+    if not access_token:
+        return redirect('spotify_login')
+
+    user_data = get_spotify_user_info(access_token)
+
+    return render(request, 'wrappedSelect.html', {
+        'user_data': user_data
+    })
 
 
 @login_required
