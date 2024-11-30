@@ -631,3 +631,19 @@ def view_saved_duo_wrap(request, wrap_id):
 
     # Render the wrapped.html template with the context data
     return render(request, 'wrappedDuo.html', context)
+
+
+@login_required
+def contact_developers(request):
+    """
+    Renders the contact developers page.
+
+    This view requires the user to be logged in. It renders a template
+    where users can contact the developers. The request context is passed
+    to the template, allowing for further customization if needed in the future.
+
+    :param request: The HTTP request object associated with the user's session.
+    :return: Renders the 'contactDevelopers.html' template.
+    """
+    return render(request, 'contactDevelopers.html', {})
+
