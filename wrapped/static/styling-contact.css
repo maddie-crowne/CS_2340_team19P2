@@ -1,0 +1,32 @@
+/* Ensure full viewport height for the body and html elements */
+html, body {
+  height: 100%; /* Make sure the height of body and html is 100% */
+  margin: 0; /* Remove default margins */
+  padding: 0; /* Remove default padding */
+}
+
+.background {
+  background-image: url('images/Untitled-design-6.png');
+  background-size: cover; /* Ensure the background image covers the entire container */
+  background-attachment: scroll;
+  height: 100%; /* Use full viewport height */
+}
+
+h1 {
+  text-align: center; /* Center the heading */
+}
+
+.iframe-container {
+  display: flex;
+  justify-content: center; /* Centers iframe horizontally */
+  align-items: center; /* Centers iframe vertically */
+  width: 100%; /* Full width */
+  height: 80vh; /* Adjust the iframe container height */
+}
+
+.iframe-container iframe {
+  width: 80%; /* The iframe takes 80% of the container width */
+  max-width: 1000px; /* Maximum width of the iframe */
+  height: 80vh; /* The iframe height will be 80% of the viewport */
+  border: none; /* No border for the iframe */
+}

@@ -1,0 +1,20 @@
+.sign-up {
+    visibility: visible;
+    z-index: 10;
+    position: relative;
+}
+
+.form-styling {
+    margin-bottom: 100px;
+    width: 100%;
+}
+
+.submit-button-style {
+    justify-content: flex-start;
+    width: 500px;
+}
+
+.submit-button-style-2 {
+    padding-bottom: 9px;
+    background-color: #4192EE;
+}
