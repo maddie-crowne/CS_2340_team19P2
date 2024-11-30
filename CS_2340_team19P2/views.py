@@ -103,17 +103,3 @@ def spotify_callback(request):
     else:
         # Handle the case where the code is missing
         return render(request, 'error.html', {"message": "Failed to authenticate with Spotify"})
-
-@login_required
-def contact_developers(request):
-    """
-    Renders the contact developers page.
-
-    This view requires the user to be logged in. It renders a template
-    where users can contact the developers. The request context is passed
-    to the template, allowing for further customization if needed in the future.
-
-    :param request: The HTTP request object associated with the user's session.
-    :return: Renders the 'contactDevelopers.html' template.
-    """
-    return render(request, 'contactDevelopers.html', {})
