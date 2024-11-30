@@ -27,6 +27,4 @@ urlpatterns = [
     path('spotify/login/', views.spotify_login, name='spotify_login'),
     path('callback/', views.spotify_callback, name='spotify_callback'),
     path('wrapped/', include('wrapped.urls')),
-    path('contactTheDevelopers', views.contact_developers, name='contactDevelopers'),
-
 ]
