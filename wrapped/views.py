@@ -245,18 +245,37 @@ def get_artist_songs(access_token, artist_id):
 
 @login_required
 def account(request):
+    """
+    Renders the user's account page with their saved wraps, Spotify profile data, and duo wraps.
+
+    :param request: The HTTP request object associated with the user's session.
+    :return: Renders the 'accountInfo.html' template with user, Spotify, and wrap data.
+    """
     user = request.user
     saved = SaveWrap.objects.filter(user=user)
     duo_saved = SaveDuoWrap.objects.filter(user=user)
 
+    access_token = request.session.get('spotify_access_token')
+
+    if not access_token:
+        return redirect('spotify_login')
+
+    user_data = get_spotify_user_info(access_token)
+
+    # Extract profile picture (if available)
+    profile_image = None
+    if user_data.get('images'):
+        profile_image = user_data['images'][0].get('url')
+
     context = {
         'user': user,
         'saved': saved,
-        'duo_saved': duo_saved
+        'duo_saved': duo_saved,
+        'user_data': user_data,
+        'profile_image': profile_image,
     }
 
     return render(request, 'accountInfo.html', context)
-
 
 @login_required
 def delete_wrap(request, wrap_id):
@@ -281,8 +300,10 @@ def select(request):
     if not access_token:
         return redirect('spotify_login')
 
+    # Retrieve Spotify user data
     user_data = get_spotify_user_info(access_token)
 
+    # Pass user_data to the template
     return render(request, 'wrappedSelect.html', {
         'user_data': user_data
     })
@@ -402,6 +423,12 @@ def duo(request):
     access_token_user1 = request.session.get('spotify_access_token')
     profile_user1 = request.session.get('spotify_profile')
 
+    if not access_token_user1 or not profile_user1:
+        return redirect('spotify_login')
+
+    user1_display_name = profile_user1.get('display_name', 'User1')
+    user1_first_name = user1_display_name.split(' ')[0] if user1_display_name else 'User1'
+
     # Get user's top artists
     top_artists_url = "https://api.spotify.com/v1/me/top/artists"
     headers = {"Authorization": f"Bearer {access_token_user1}"}
@@ -435,6 +462,12 @@ def duo(request):
 
     access_token_user2 = request.session.get('spotify_access_token_user2')
     profile_user2 = request.session.get('spotify_profile_user2')
+
+    if not access_token_user2 or not profile_user2:
+        return redirect('spotify_login')
+
+    user2_display_name = profile_user2.get('display_name', 'User2')
+    user2_first_name = user2_display_name.split(' ')[0] if user2_display_name else 'User2'
 
     # Get user's top artists
     headers = {"Authorization": f"Bearer {access_token_user2}"}
@@ -476,6 +509,10 @@ def duo(request):
         if i < len(preview_urls_user2):
             interleaved_preview_urls.append(preview_urls_user2[i])
 
+    user1_profile_pic = profile_user1.get('images', [{}])[0].get('url',
+                                                                 '')  # Get the first image URL or an empty string
+    user2_profile_pic = profile_user2.get('images', [{}])[0].get('url', '')
+
     # Save the wrap data automatically upon loading
     saved_wrap = SaveDuoWrap(
         user=request.user,
@@ -490,9 +527,12 @@ def duo(request):
     )
     saved_wrap.save()
 
+    # Pass the first names to the template
     return render(request, 'wrappedDuo.html', {
-        'user1': profile_user1,
-        'user2': profile_user2,
+        'user1_first_name': user1_first_name,
+        'user2_first_name': user2_first_name,
+        'user1_profile_pic': user1_profile_pic,  # Profile picture for user 1
+        'user2_profile_pic': user2_profile_pic,  # Profile picture for user 2
         'compatibility': round(compatibility),
         'valence_user1': round(valence_user1 * 100),
         'valence_user2': round(valence_user2 * 100),
