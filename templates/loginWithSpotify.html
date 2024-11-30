@@ -8,8 +8,8 @@
   <meta content="Link to Spotify" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
-  <link rel="stylesheet" href="{% static 'normalize.css' %}">
-  <link rel="stylesheet" href="{% static 'webflow.css' %}">
+  <link rel="stylesheet" href="{% static 'normalize-loginspotify.css' %}">
+  <link rel="stylesheet" href="{% static 'webflow-loginspotify.css' %}">
   <link rel="stylesheet" href="{% static 'spotify-wrapped-site-37828bb56ac2e5a5f2.webflow.css' %}">
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
@@ -21,15 +21,16 @@
 </head>
 <body class="body-2">
 <video autoplay muted loop id="myVideo">
-  <source src="../wrapped/static/images/loginwspotify_backgroundvideo.mp4" type="video/mp4">
+  <source src="{% static 'images/loginwspotify_backgroundvideo.mp4' %}" type="video/mp4">
+  Your browser does not support the video tag.
 </video>
 
-<div class="content">
+<div class="content" style="background-color: transparent; opacity: 1;">
     <div class="frame-6">
         <div class="text-block">[ Wrapped ]</div>
     </div>
     <div class="w-layout-blockcontainer container-3 w-container">
-        <div class="heading-3"><strong class="bold-text">Link to Spotify</strong></div><img src="images/Spotify_Primary_Logo_RGB_Black.png" loading="lazy" width="154" sizes="154px" alt="" srcset="images/Spotify_Primary_Logo_RGB_Black-p-500.png 500w, images/Spotify_Primary_Logo_RGB_Black.png 939w" class="image-3">
+        <div class="heading-3"><strong class="bold-text">Link to Spotify</strong></div><img src="../wrapped/static/images/Spotify_Primary_Logo_RGB_Black.png" loading="lazy" width="154" sizes="154px" alt="" srcset="images/Spotify_Primary_Logo_RGB_Black-p-500.png 500w, images/Spotify_Primary_Logo_RGB_Black.png 939w" class="image-3">
         <a type="button" onclick="window.location.href='{% url 'spotify_login' %}'" class="button w-button"><strong>Click here to Link</strong></a>
     </div>
 </div>
