@@ -76,7 +76,7 @@
                         <form action="{% url 'wrapped:delete_wrap' wrap.id %}" method="POST"
                               onsubmit="return confirm('Are you sure you want to unsave this wrap?');">
                             {% csrf_token %}
-                            <button style="margin: 10px 0 0 100px" type="submit" class="button-3 w-button delete-wrap-button">Delete</button>
+                            <button style="margin: 0 0 0 100px" type="submit" class="button-3 w-button delete-wrap-button">Delete</button>
                         </form>
                     </li>
                 {% empty %}
