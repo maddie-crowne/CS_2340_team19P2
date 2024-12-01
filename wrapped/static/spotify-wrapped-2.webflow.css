@@ -518,7 +518,7 @@
 
 .body {
   mix-blend-mode: normal;
-  background-image: url('/wrapped/static/images/7362864e0161e3ee808d4da417f6ce58.png');
+  background-image: url('../static/images/7362864e0161e3ee808d4da417f6ce58.png');
   background-position: 50%;
   background-repeat: repeat;
   background-size: 2000px;
@@ -1429,7 +1429,7 @@
 }
 
 .body-5 {
-  background-image: url('/wrapped/static/images/Spotify-Wrapped-Backgrounds-1.png');
+  background-image: url('../static/images/Spotify-Wrapped-Backgrounds-1.png');
   background-position: 50%;
   background-size: 110% 125%;
 }
@@ -1715,13 +1715,13 @@
 }
 
 .icon-2, .link-block {
-  background-image: url('/wrapped/static/images/noun-circle-user-avatar-4035892W.png');
+  background-image: url('../static/images/noun-circle-user-avatar-4035892W.png');
   background-position: 0 0;
   background-size: auto;
 }
 
 .icon-3 {
-  background-image: url('/wrapped/static/images/noun-circle-user-avatar-4035892W.png');
+  background-image: url('../static/images/noun-circle-user-avatar-4035892W.png');
   background-position: 0 0;
   background-size: 10% 10%;
 }
@@ -1746,7 +1746,7 @@
 }
 
 .body-6 {
-  background-image: url('/wrapped/static/images/7.png');
+  background-image: url('../static/images/7.png');
   background-position: 50% 85%;
   background-size: 101% 100%;
 }
@@ -1759,7 +1759,7 @@
 
 .button-5 {
   background-color: #0000;
-  background-image: url('/wrapped/static/images/noun-circle-user-avatar-4035892W.png');
+  background-image: url('../static/images/noun-circle-user-avatar-4035892W.png');
   background-position: 50% 20%;
   background-size: 135%;
   border-radius: 700px;
@@ -1870,7 +1870,7 @@
 
 .body-7 {
   background-color: #0000;
-  background-image: url('/wrapped/static/images/Untitled-design-6.png');
+  background-image: url('../static/images/Untitled-design-6.png');
   background-position: 0 0;
   background-size: 100%;
   background-attachment: scroll;
@@ -1923,6 +1923,15 @@
   box-shadow: 0 10px 5px #0003;
 }
 
+.section-6 {
+  height: 12%;
+}
+
+.section-4 {
+  height: 20%;
+  padding-top: 7px;
+}
+
 .bold-text-6 {
   color: #000;
   mix-blend-mode: overlay;
@@ -1961,7 +1970,7 @@
 }
 
 .body-8 {
-  background-image: url('/wrapped/static/images/Spotify-Wrapped-Backgrounds-1440-x-1080-px-7.png');
+  background-image: url('../static/images/Spotify-Wrapped-Backgrounds-1440-x-1080-px-7.png');
   background-position: 0 0;
   background-size: 101% 100%;
   height: 651%;
@@ -1969,7 +1978,7 @@
 }
 
 .body-9 {
-  background-image: url('/wrapped/static/images/Spotify-Wrapped-Backgrounds-1440-x-1080-px-7.png');
+  background-image: url('../static/images/Spotify-Wrapped-Backgrounds-1440-x-1080-px-7.png');
   background-position: 0 0;
   background-size: 101% 110%;
 }
@@ -2061,7 +2070,7 @@
 .container-7 {
   mix-blend-mode: normal;
   background-color: #0000;
-  background-image: url('/wrapped/static/images/noun-circle-user-avatar-4035892W.png');
+  background-image: url('../static/images/noun-circle-user-avatar-4035892W.png');
   background-position: 50% 25%;
   background-size: 140%;
   border-radius: 700px;
@@ -2072,13 +2081,13 @@
 }
 
 .page-slot {
-  background-image: url('/wrapped/static/images/Untitled-design.png');
+  background-image: url('../static/images/Untitled-design.png');
   background-position: 0 0;
   height: 100%;
 }
 
 .vibemeter {
-  background-image: url('/wrapped/static/images/6.png');
+  background-image: url('../static/images/6.png');
   background-position: 0 0;
   background-size: 100% 100%;
   height: 1080px;
@@ -2132,7 +2141,7 @@
 }
 
 .top-tracks-title {
-  background-image: url('/wrapped/static/images/12.png');
+  background-image: url('../static/images/12.png');
   background-position: 0%;
   background-size: 100% 100%;
   height: 1080px;
@@ -2187,7 +2196,7 @@
 }
 
 .top-tracks-display {
-  background-image: url('/wrapped/static/images/25.png');
+  background-image: url('../static/images/25.png');
   background-position: 0 0;
   background-size: 100% 100%;
   height: 1080px;
@@ -2214,7 +2223,7 @@
 }
 
 .fav-genres-title {
-  background-image: url('/wrapped/static/images/14.png');
+  background-image: url('../static/images/14.png');
   background-position: 0 0;
   background-size: 100% 100%;
   height: 1080px;
@@ -2235,7 +2244,7 @@
 }
 
 .section-7 {
-  background-image: url('/wrapped/static/images/9.png');
+  background-image: url('../static/images/9.png');
   background-position: 0 0;
   background-size: 100% 100%;
   height: 1080px;
@@ -2244,7 +2253,7 @@
 
 .section-8 {
   text-shadow: 0 1px 1px #0003;
-  background-image: url('/wrapped/static/images/7_1.png');
+  background-image: url('../static/images/7_1.png');
   background-position: 0 0;
   background-size: 100% 100%;
   height: 1080px;
@@ -2671,7 +2680,7 @@
 }
 
 .top-artists-title {
-  background-image: url('/wrapped/static/images/12.png');
+  background-image: url('../static/images/12.png');
   background-position: 0%;
   background-size: auto;
   height: 1080px;
@@ -2683,21 +2692,21 @@
 }
 
 .top-5-artists-display {
-  background-image: url('/wrapped/static/images/26.png');
+  background-image: url('../static/images/26.png');
   background-position: 0 0;
   background-size: 100% 100%;
   height: 1080px;
 }
 
 .fav-genres-display {
-  background-image: url('/wrapped/static/images/23.png');
+  background-image: url('../static/images/23.png');
   background-position: 0 0;
   background-size: 100% 100%;
   height: 1080px;
 }
 
 .top-5-artists-title {
-  background-image: url('/wrapped/static/images/13.png');
+  background-image: url('../static/images/13.png');
   background-position: 0%;
   background-size: 100% 100%;
   height: 1080px;
@@ -2925,7 +2934,7 @@
 }
 
 .top-tracks-display-copy {
-  background-image: url('/wrapped/static/images/Spotify-Wrapped-Project-Page-Design-14.png');
+  background-image: url('../static/images/Spotify-Wrapped-Project-Page-Design-14.png');
   background-position: 0 0;
   background-size: 100% 100%;
   height: 1080px;
@@ -2958,7 +2967,7 @@
   }
 
   .body-6 {
-    background-image: url('/wrapped/static/images/7.png'), radial-gradient(circle, #8d167d, #fd9022);
+    background-image: url('../static/images/7.png'), radial-gradient(circle, #8d167d, #fd9022);
     background-position: 50% 75%, 0 0;
     background-size: 101%, auto;
   }
@@ -3116,7 +3125,7 @@
   }
 
   .body-3 {
-    background-image: url('/wrapped/static/images/Spotify-Wrapped-Backgrounds-1.png');
+    background-image: url('../static/images/Spotify-Wrapped-Backgrounds-1.png');
     background-position: 0 0;
     background-size: 101%;
     margin-left: auto;
@@ -3167,7 +3176,7 @@
   }
 
   .body-5 {
-    background-image: url('/wrapped/static/images/Spotify-Wrapped-Backgrounds-1.png');
+    background-image: url('../static/images/Spotify-Wrapped-Backgrounds-1.png');
     background-position: 0 0;
     background-size: 101% 100%;
   }
@@ -3192,7 +3201,7 @@
 
   .button-4 {
     background-color: #0000;
-    background-image: url('/wrapped/static/images/noun-circle-user-avatar-4035892W.png');
+    background-image: url('../static/images/noun-circle-user-avatar-4035892W.png');
     background-position: 0 0;
     background-size: 100% 100%;
     width: 120%;
@@ -3207,7 +3216,7 @@
   }
 
   .body-7 {
-    background-image: url('/wrapped/static/images/Untitled-1440-x-1080-px-2.png');
+    background-image: url('../static/images/Untitled-1440-x-1080-px-2.png');
     background-position: 0 0;
     background-size: 100%;
     height: 100%;
