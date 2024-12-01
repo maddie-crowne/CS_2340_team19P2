@@ -27,7 +27,7 @@ class SaveDuoWrap(models.Model):
     # Duo wrapped info
     user1_data = models.JSONField()  # JSON
     user2_data = models.JSONField()  # JSON
-    compatibility = models.FloatField()  # number
+    compatibility = models.IntegerField()  # number
     valence_user1 = models.FloatField()  # number
     valence_user2 = models.FloatField()  # number
     top_tracks_user1 = models.JSONField()  # JSON
