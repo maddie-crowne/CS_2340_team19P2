@@ -94,9 +94,12 @@
       <div class="w-layout-blockcontainer container-10 w-container">
         <div class="text-block-34-copy-copy-copy">Your Top Tracks</div>
           <img src="{{ top_tracks.items.0.album.images.0.url }}" loading="lazy" width="342" alt="" class="image-17">
-        <div class="text-block-35-copy-copy-copy">{{ top_tracks.items.0.name }}</div>
+        <div style="white-space: nowrap;" class="text-block-35-copy-copy-copy">
+            {{ top_tracks.items.0.name }}
+        </div>
       </div>
     </div>
+  
     <div id="w-node-aa728235-21a6-0168-19fc-9fbd47726da5-03f32f7d" class="w-layout-layout quick-stack-5 wf-layout-layout">
         {% for track in top_tracks.items|slice:"1:5" %}
           <div id="w-node-aa728235-21a6-0168-19fc-9fbd47726da6-03f32f7d" class="w-layout-cell">
@@ -105,29 +108,25 @@
           <div id="w-node-aa728235-21a6-0168-19fc-9fbd47726da7-03f32f7d" class="w-layout-cell cell-6">
               <img src="{{ track.album.images.0.url }}" loading="lazy" width="94" alt="" class="image-16"></div>
           <div id="w-node-_13a727dc-c2b8-dab1-ee06-47de9f1b01d9-03f32f7d" class="w-layout-cell cell-5">
-             <div class="text-block-35-copy-copy">{{ track.name }}</div>
+             <div style="white-space: nowrap;" class="text-block-35-copy-copy">
+                 {{ track.name }}
+             </div>
           </div>
         {% endfor %}
     </div>
   </section>
-  <section class="section-4">
+  <section class="section-4-artists">
     <div class="text-block-23">TOP</div>
     <div class="text-block-24">5</div>
     <div class="text-block-23">ARTISTS</div>
   </section>
   <section class="top-5-artists-display">
     <div class="div-block-27">
-        {% for artist, preview_url in artist_songs.items %}
-            <audio class="artist-audio">
-                <source src="{{ preview_url }}" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        {% endfor %}
         {% if top_artists.items.0.images.0.url %}
             <div class="w-layout-blockcontainer container-10 w-container">
                 <div class="text-block-34-copy-copy-copy">Your Top Artists</div>
                   <img src="{{ top_artists.items.0.images.0.url }}" width="342" alt="" class="image-17">
-                <div class="text-block-35-copy-copy-copy">{{ top_artists.items.0.name }}</div>
+                <div style="white-space: nowrap;" class="text-block-35-copy-copy-copy">{{ top_artists.items.0.name }}</div>
               </div>
             </div>
         {% endif %}
@@ -143,7 +142,7 @@
             {% endif %}
           </div>
           <div id="w-node-f3217001-133c-434b-e208-31109b8b70b2-03f32f7d" class="w-layout-cell cell-5">
-            <div class="text-block-35-copy-copy">{{ artist.name }}</div>
+            <div style="white-space: nowrap;" class="text-block-35-copy-copy">{{ artist.name }}</div>
           </div>
       {% endfor %}
 
@@ -156,7 +155,7 @@
     <div class="div-block-26">
       <div class="text-block-36">Your Favorite Genres</div>
         {% if top_genres %}
-            <div class="text-block-38">#1 {{ top_genres.0 }}</div>
+            <div style="white-space: nowrap;" class="text-block-38">#1 {{ top_genres.0 }}</div>
         {% else %}
             <p class="genre-title">No top genres available.</p>
         {% endif %}
@@ -165,7 +164,7 @@
         {% if top_genres %}
             {% for genre in top_genres|slice:":5" %}
                 {% if forloop.counter > 1 %}
-                    <div class="text-block-34">#{{ forloop.counter }} {{ genre }}</div>
+                    <div style="white-space: nowrap;" class="text-block-34">#{{ forloop.counter }} {{ genre }}</div>
                 {% endif %}
             {% endfor %}
         {% else %}
@@ -179,3 +178,58 @@
 
 </body>
 </html>
+
+
+<script>
+    // Function to play and stop audio based on visibility of the slide
+function playAudioOnSlide(slideIndex, tracksSelector) {
+    const slide = document.querySelectorAll('.slide')[slideIndex]; // Get the slide at the specific index
+    const audios = slide.querySelectorAll(tracksSelector); // Get the audio elements inside the slide
+    let index = 0;
+
+    // Play next track function
+    function playNext() {
+        if (index < audios.length) {
+            audios[index].play().then(() => {
+                audios[index].onended = function() {
+                    index++;
+                    playNext(); // Continue playing next track when the current track ends
+                };
+            }).catch(err => {
+                console.error('Error playing audio:', err);
+                index++;
+                playNext(); // Skip to next track if there's an error
+            });
+        }
+    }
+
+    // Stop all audios
+    function stopAudio() {
+        audios.forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0; // Reset the audio to the beginning
+        });
+    }
+
+    // Set up Intersection Observer to trigger playback when the slide is in view and stop when out of view
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) { // If the slide is visible
+                playNext();
+            } else { // If the slide is no longer visible
+                stopAudio();
+            }
+        });
+    }, { threshold: 0.5 }); // Trigger when 50% of the slide is visible
+
+    observer.observe(slide); // Start observing the slide
+}
+
+// Automatically play top tracks when the slide becomes visible
+playAudioOnSlide(3, '.track-audio'); // Slide index 3 is where the top tracks are
+// Automatically play top artist songs when the slide becomes visible
+playAudioOnSlide(5, '.artist-audio'); // Slide index 5 is where the top artists are
+// Automatically play top genre songs when the slide becomes visible
+playAudioOnSlide(7, '.genre-audio'); // Slide index 7 is where the top genres are
+
+</script>
