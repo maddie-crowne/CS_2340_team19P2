@@ -218,17 +218,24 @@
                     class="user-log-in-log-out-2">Log out
             </button>
             <div class="w-layout-vflex flex-block-7">
-                <div class="text-block-11"><strong
-                        class="bold-text-10">Name: {{ user.first_name }} {{ user.last_name }} </strong></div>
-                <div class="text-block-10"><strong class="bold-text-7">Email: {{ user.email }} </strong></div>
-                <div class="text-block-9"><strong class="bold-text-8">Username: {{ user.username }}</strong>
+                <div class="text-block-11">
+                    <strong class="bold-text-10">Name: {{ user.first_name }} {{ user.last_name }}</strong>
                 </div>
+                <div class="text-block-10">
+                    <strong class="bold-text-7">Email: {{ user.email }}</strong>
+                </div>
+                <div class="text-block-9">
+                    <strong class="bold-text-8">Username: {{ user.username }}</strong>
+                </div>
+                <form class="button-10 w-button" action="{% url 'auth:delete_account' %}" method="POST"
+                      onsubmit="return confirm('Are you sure you want to delete your account?');"
+                      style="display: flex; justify-content: center; margin-top: 30px; width: 100%;">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-account-button" style="padding: 10px 20px; font-size: 16px;">
+                        Delete Account
+                    </button>
+                </form>
             </div>
-            <form class="button-10 w-button" action="{% url 'auth:delete_account' %}" method="POST"
-                  onsubmit="return confirm('Are you sure you want to delete your account?');">
-                {% csrf_token %}
-                <button type="submit" class="delete-account-button">Delete Account</button>
-            </form>
         </div>
     </section>
 </div>
