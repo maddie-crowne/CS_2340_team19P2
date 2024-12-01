@@ -792,4 +792,15 @@ def contact_developers(request):
     :param request: The HTTP request object associated with the user's session.
     :return: Renders the 'contactDevelopers.html' template.
     """
-    return render(request, 'contactDevelopers.html', {})
+    access_token = request.session.get('spotify_access_token')
+
+    if not access_token:
+        return redirect('spotify_login')
+
+    # Retrieve Spotify user data
+    user_data = get_spotify_user_info(access_token)
+
+    # Pass user_data to the template
+    return render(request, 'contactDevelopers.html', {
+        'user_data': user_data
+    })
