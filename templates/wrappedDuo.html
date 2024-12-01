@@ -150,7 +150,7 @@
                             <div class="nav-dropdown-icon-2 w-icon-dropdown-toggle"></div>
                             <div class="text-block-13">{{ language_code|upper }}</div>
                         </div>
-                        <nav class="nav-dropdown-list-2 shadow-three mobile-shadow-hide w-dropdown-list">
+                        <nav class="w-dropdown-list">
                             <!-- Language switch form -->
                             <form action="{% url 'set_language' %}" method="POST">
                                 {% csrf_token %}

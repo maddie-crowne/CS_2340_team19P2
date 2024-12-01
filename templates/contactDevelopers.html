@@ -139,7 +139,7 @@
                                 {{ language_code|upper }}
                             </div>
                         </div>
-                        <nav class="nav-dropdown-list-2 shadow-three mobile-shadow-hide w-dropdown-list">
+                        <nav class="w-dropdown-list">
                             <!-- Language switch form -->
                             <form action="{% url 'set_language' %}" method="POST">
                                 {% csrf_token %}
@@ -169,9 +169,9 @@
     </div>
 </div>
 
-<section class="team-circles-2" style="margin-bottom: -50px;">
+<section class="team-circles-2" style="margin-top: -50px; margin-bottom: -50px;">
     <div class="container-9">
-        <h2 class="centered-heading-4">{% trans "Meet Our Team" %}</h2>
+        <h2 class="centered-heading-4" style="font-size: 50px; margin-bottom: 75px">{% trans "Meet Our Team" %}</h2>
         <div class="team-grid-2">
             <div id="w-node-_3192a548-f744-78d3-631d-8069a74b88b6-809b3663" class="team-card-2">
                 <img src="{% static 'images/67381abe0a49bf6e4be9947e_pdimagebw.png' %}" loading="lazy" alt=""
