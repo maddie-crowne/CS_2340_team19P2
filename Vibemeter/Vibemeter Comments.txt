@@ -1,0 +1,6 @@
+Vibemeter Comments
+Comment Display:
+0 - 32%: Your beats have HYPE vibes
+33 - 52%: Your beats have LOVELY vibes
+53 - 72%: Your beats have COOL vibes
+73 - 99%: Your beats have CHILL vibes
