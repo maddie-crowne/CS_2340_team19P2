@@ -30,7 +30,9 @@
         <div class="text-block">[ Wrapped ]</div>
     </div>
     <div class="w-layout-blockcontainer container-3 w-container">
-        <div class="heading-3"><strong class="bold-text">Link to Spotify</strong></div><img src="../wrapped/static/images/Spotify_Primary_Logo_RGB_Black.png" loading="lazy" width="154" sizes="154px" alt="" srcset="images/Spotify_Primary_Logo_RGB_Black-p-500.png 500w, images/Spotify_Primary_Logo_RGB_Black.png 939w" class="image-3">
+        <div class="heading-3"><strong class="bold-text">Link to Spotify</strong></div>
+        <img src="{% static 'images/Spotify_Primary_Logo_RGB_Black.png' %}" loading="lazy" width="154" sizes="154px" alt="" 
+             srcset="{% static 'images/Spotify_Primary_Logo_RGB_Black-p-500.png' %} 500w, {% static 'images/Spotify_Primary_Logo_RGB_Black.png' %} 939w" class="image-3">
         <a type="button" onclick="window.location.href='{% url 'spotify_login' %}'" class="button w-button"><strong>Click here to Link</strong></a>
     </div>
 </div>
