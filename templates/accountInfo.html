@@ -21,7 +21,7 @@
   <link href="../wrapped/static/images/webclip.png" rel="apple-touch-icon">
 </head>
 <body class="body-4">
- <div class="navbar-logo-center">
+  <div class="navbar-logo-center">
     <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar-logo-center-container shadow-three w-nav">
       <div class="navbar-wrapper-three">
         <ul role="list" class="nav-menu-block-2 w-list-unstyled">
@@ -57,18 +57,18 @@
     <div id="w-node-_50df189a-5ae4-4a77-e837-a4879f09f99f-3bfe6e2b">
       <div class="div-block-10">
         <h1 class="heading-5"><strong class="bold-text-6">Saved Wraps</strong></h1>
-        <div class="div-block-4 wrap1">
+        <div style="margin-left: -25px; height: 350px; overflow-y: auto;" class="div-block-4 wrap1">
           <div class="saved-individual-wraps div-block-4 wrap2">
             <ul role="list" class="list-2 wrap wrap2">
                 {% for wrap in saved %}
-                    <li class="wrapped_text_delete OMG" style="width: 100%; display: flex;">
+                    <li class="wrapped_text_delete OMG" style="width: 90%; display: flex;">
                         <a href="{% url 'wrapped:view_saved_wrap' wrap.id %}?time_range={{ wrap.time_range }}">
                             {% if wrap.time_range == 'short_term' %}
-                                <p style="width: 125%;" class="button-2 w-button"><strong class="bold-text-13">Monthly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></strong></p>
+                                <p style="height: 80%; width: 125%; white-space: normal; margin: 10px; padding: 10px 5px 0 5px;" class="button-2 w-button"><strong class="bold-text-13">Monthly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></strong></p>
                             {% elif wrap.time_range == 'medium_term' %}
-                                <p style="width: 125%;" class="button-2 w-button"><strong class="bold-text-13">6 Month Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></strong></p>
+                                <p style="height: 80%; width: 125%; white-space: normal; margin: 10px; padding: 10px 5px 0 5px;" class="button-2 w-button"><strong class="bold-text-13">6 Month Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></strong></p>
                             {% elif wrap.time_range == 'long_term' %}
-                                <p style="width: 125%;" class="button-2 w-button"><strong class="bold-text-13">Yearly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></strong></p>
+                                <p style="height: 80%; width: 125%; white-space: normal; margin: 10px; padding: 10px 5px 0 5px;" class="button-2 w-button"><strong class="bold-text-13">Yearly Wrap: <span class="month-range" data-created-at="{{ wrap.created_at }}"></span></strong></p>
                             {% endif %}
                         </a>
 
@@ -76,7 +76,7 @@
                         <form action="{% url 'wrapped:delete_wrap' wrap.id %}" method="POST"
                               onsubmit="return confirm('Are you sure you want to unsave this wrap?');">
                             {% csrf_token %}
-                            <button style="margin: 0 0 0 100px" type="submit" class="button-3 w-button delete-wrap-button">Delete</button>
+                            <button style="margin: 10px 0 0 100px" type="submit" class="button-3 w-button delete-wrap-button">Delete</button>
                         </form>
                     </li>
                 {% empty %}
@@ -88,20 +88,20 @@
       </div>
       <div class="div-block-9">
         <h1 class="heading-6">Saved DuoWraps</h1>
-          <div class="saved-duo-wraps">
+          <div style="overflow-y: auto;" class="saved-duo-wraps">
             <ul role="list" class="list-2">
                 {% for wrap in duo_saved %}
-                    <li>
-                        <a href="{% url 'wrapped:view_saved_duo_wrap' wrap.id %}">
-                            <p class="button-2 w-button"><strong class="bold-text-18">{{ wrap.user1_data.display_name }} and {{ wrap.user2_data.display_name }}'s
-                                Wrap: {{ wrap.created_at|date:"F d, Y" }}</strong></p>
+                    <li style="width: 90%; display: flex;">
+                        <a style="display: block; width: 100%;" href="{% url 'wrapped:view_saved_duo_wrap' wrap.id %}">
+                            <p style="height: 100%; width: 100%; white-space: normal; margin: 0; padding: 5px;" class="button-2 w-button"><strong class="bold-text-18">{{ wrap.user1_data.display_name }} and {{ wrap.user2_data.display_name }}'s
+                                6 Month DuoWrap {{ wrap.created_at|date:"m/d/y" }}</strong></p>
                         </a>
-
+                        
                         <!-- Delete Button -->
                         <form action="{% url 'wrapped:delete_duo_wrap' wrap.id %}" method="POST"
                               onsubmit="return confirm('Are you sure you want to unsave this wrap?');">
                             {% csrf_token %}
-                            <button type="submit" class="delete-wrap-button button-3 w-button">Delete</button>
+                            <button style="margin: 10px -10px 0 20px" type="submit" class="delete-wrap-button button-3 w-button">Delete</button>
                         </form>
                     </li>
                 {% empty %}
@@ -113,18 +113,22 @@
     </div>
     <section id="w-node-b8e62a2e-8796-9b8e-64d4-a701900e190f-3bfe6e2b" style="width: 100%;" class="section-2 account_info">
       <div class="div-block-7">
-          <img width="178" height="178" sizes="178px" class="image-5 user_pfp" src="{{ user_data.images.0.url }}"
+          <img style="margin: 20px; border-radius: 100px;" width="178" height="178" sizes="178px" class="image-5" src="{{ user_data.images.0.url }}"
                   alt="Profile Picture"/>
         <div class="text-block-6">
             <strong class="bold-text-9">Account Details</strong>
         </div>
-        <button class="user-log-in-log-out-2" data-wf-user-logout="Log out" data-wf-user-login="Log in" type="button">Log out</button>
+        <button id="logout-button" onclick="window.location.href='{% url 'auth:logout' %}'" class="user-log-in-log-out-2">Log out</button>
         <div class="w-layout-vflex flex-block-7">
           <div class="text-block-11"><strong class="bold-text-10">Name: {{ user.first_name }} {{ user.last_name }} </strong></div>
           <div class="text-block-10"><strong class="bold-text-7">Email: {{ user.email }} </strong></div>
           <div class="text-block-9"><strong class="bold-text-8">Username: {{ user_data.display_name }}</strong></div>
         </div>
-        <a href="#" class="button-10 w-button">Delete Account</a>
+        <form class="button-10 w-button" action="{% url 'auth:delete_account' %}" method="POST" 
+              onsubmit="return confirm('Are you sure you want to delete your account?');">
+            {% csrf_token %}
+            <button type="submit" class="delete-account-button">Delete Account</button>
+        </form>
       </div>
     </section>
   </div>
@@ -194,6 +198,34 @@
                 'long_term';
         const monthRange = getMonthRange(createdAt, timeRange);
         element.textContent = monthRange;
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const savedDuoWrapsContainer = document.querySelector(".saved-duo-wraps");
+      const savedDuoWrapsList = savedDuoWrapsContainer.querySelector(".list-2");
+
+      // Function to adjust container size based on the number of items
+      function adjustContainerSize() {
+        const itemCount = savedDuoWrapsList.children.length;
+        if (itemCount > 0) {
+          savedDuoWrapsContainer.style.height = `${itemCount * 60 + 20}px`; // Adjust this to fit your design
+        } else {
+          savedDuoWrapsContainer.style.height = "auto"; // Shrinks when no items exist
+        }
+      }
+
+      // Adjust container size when a new item is added
+      document.querySelectorAll(".saved-duo-wraps form").forEach(function (form) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevents immediate submission to allow resizing
+          // Remove the wrap from the DOM (simulate delete)
+          form.closest("li").remove();
+          adjustContainerSize(); // Adjust the size after deletion
+        });
+      });
+
+      // Initial adjustment on page load
+      adjustContainerSize();
     });
 </script>
 </body>
