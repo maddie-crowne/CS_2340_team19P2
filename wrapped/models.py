@@ -37,4 +37,4 @@ class SaveDuoWrap(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Saved Duo Wrap for {self.user.username} ({self.time_range})"
+        return f"Saved Duo Wrap for {self.user.username}"

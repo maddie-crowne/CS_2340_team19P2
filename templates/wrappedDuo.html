@@ -59,14 +59,14 @@
 
 <div class="div-block-17">
     <div class="div-block-29">
-      <div class="text-block-16">{{ user1_first_name }} &amp; {{ user2_first_name }}&#x27;s <br>DuoWrapped<br></div>
+      <div class="text-block-16">{{ user1_data.display_name }} &amp; {{ user2_data.display_name }}&#x27;s <br>DuoWrapped<br></div>
       <div id="w-node-_7552cde6-667f-cef7-1f8b-a61d767a759e-c1154b3c" class="w-layout-layout wf-layout-layout">
         <div class="w-layout-cell cell-2">
-          <img class="w-layout-blockcontainer container-7 w-container" src="{{ user1_profile_pic }}"
+          <img class="w-layout-blockcontainer container-7 w-container" src="{{ user1_data.images.0.url }}"
                  alt="Profile Picture"/>
         </div>
         <div class="w-layout-cell cell">
-          <img class="w-layout-blockcontainer container-7 w-container" src="{{ user2_profile_pic }}"
+          <img class="w-layout-blockcontainer container-7 w-container" src="{{ user2_data.images.0.url }}"
                  alt="Profile Picture"/>
         </div>
       </div>

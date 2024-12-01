@@ -529,10 +529,8 @@ def duo(request):
 
     # Pass the first names to the template
     return render(request, 'wrappedDuo.html', {
-        'user1_first_name': user1_first_name,
-        'user2_first_name': user2_first_name,
-        'user1_profile_pic': user1_profile_pic,  # Profile picture for user 1
-        'user2_profile_pic': user2_profile_pic,  # Profile picture for user 2
+        'user1_data': profile_user1,
+        'user2_data': profile_user2,
         'compatibility': round(compatibility),
         'valence_user1': round(valence_user1 * 100),
         'valence_user2': round(valence_user2 * 100),
