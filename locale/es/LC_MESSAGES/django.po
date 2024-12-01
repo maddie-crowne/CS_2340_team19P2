@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-01 03:32-0500\n"
+"POT-Creation-Date: 2024-12-01 04:46-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,9 +20,87 @@ msgstr ""
 "1 : 2;\n"
 
 #: templates/accountInfo.html:7 templates/accountInfo.html:8
-#: templates/accountInfo.html:9
+#: templates/accountInfo.html:9 templates/accountInfo.html:219
 msgid "Account Details"
 msgstr "Detalles de la cuenta"
+
+#: templates/accountInfo.html:71 templates/contactDevelopers.html:70
+#: templates/wrapped.html:69 templates/wrappedDuo.html:84
+msgid "Contact Us"
+msgstr "Contacta con nosotras"
+
+#: templates/accountInfo.html:74 templates/contactDevelopers.html:73
+#: templates/wrapped.html:72 templates/wrappedDuo.html:87
+msgid "Invite"
+msgstr "Invitar"
+
+#: templates/accountInfo.html:115
+msgid "Saved Wraps"
+msgstr "Wraps guardados"
+
+#: templates/accountInfo.html:125
+msgid "Monthly Wrap"
+msgstr "Wrap mensual"
+
+#: templates/accountInfo.html:129
+msgid "6 Month Wrap"
+msgstr "6 meses Wrap"
+
+#: templates/accountInfo.html:133
+msgid "Yearly Wrap"
+msgstr "Wrap anual"
+
+#: templates/accountInfo.html:139 templates/accountInfo.html:193
+msgid "Are you sure you want to unsave this wrap?"
+msgstr "¿Estás seguro que deseas eliminar este wrap?"
+
+#: templates/accountInfo.html:142 templates/accountInfo.html:182
+msgid "Delete"
+msgstr "Borrar"
+
+#: templates/accountInfo.html:147 templates/accountInfo.html:205
+msgid "No saved wraps found."
+msgstr "No se encontraron wraps guardados."
+
+#: templates/accountInfo.html:154
+msgid "Saved DuoWraps"
+msgstr "DuoWraps guardados"
+
+#: templates/accountInfo.html:164
+msgid "and"
+msgstr "y"
+
+#: templates/accountInfo.html:165
+msgid "6 Month DuoWrap"
+msgstr "DuoWrap de 6 meses"
+
+#: templates/accountInfo.html:217
+msgid "Profile Picture"
+msgstr "Foto de perfil"
+
+#: templates/accountInfo.html:222
+msgid "Log out"
+msgstr "Cerrar sesión"
+
+#: templates/accountInfo.html:226
+msgid "Name"
+msgstr "Nombre"
+
+#: templates/accountInfo.html:229
+msgid "Email"
+msgstr "Dirección de correo electrónico"
+
+#: templates/accountInfo.html:232 templates/register.html:51
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: templates/accountInfo.html:235
+msgid "Are you sure you want to delete your account?"
+msgstr "¿Estás seguro de que quieres eliminar tu cuenta?"
+
+#: templates/accountInfo.html:239
+msgid "Delete Account"
+msgstr "Eliminar cuenta"
 
 #: templates/contactDevelopers.html:7
 msgid "Contact the Developers"
@@ -31,16 +109,6 @@ msgstr "Contacta con los desarrolladores"
 #: templates/contactDevelopers.html:8 templates/contactDevelopers.html:9
 msgid "Developer's Page"
 msgstr "Página del desarrollador"
-
-#: templates/contactDevelopers.html:70 templates/wrapped.html:69
-#: templates/wrappedDuo.html:83
-msgid "Contact Us"
-msgstr "Contacta con nosotras"
-
-#: templates/contactDevelopers.html:73 templates/wrapped.html:72
-#: templates/wrappedDuo.html:86
-msgid "Invite"
-msgstr "Invitar"
 
 #: templates/contactDevelopers.html:114
 msgid "Meet Our Team"
@@ -265,10 +333,6 @@ msgstr "Registro"
 msgid "Sign Up"
 msgstr "Inscribirse"
 
-#: templates/register.html:51
-msgid "Username"
-msgstr "Nombre de usuario"
-
 #: templates/register.html:57
 msgid "First Name"
 msgstr "Nombre de pila"
@@ -329,44 +393,44 @@ msgstr "FAVORITOS"
 msgid "Your Favorite Genres"
 msgstr "Tus géneros favoritos"
 
-#: templates/wrappedDuo.html:138
+#: templates/wrappedDuo.html:139
 msgid "Last 6 Months"
 msgstr "Últimos 6 meses"
 
-#: templates/wrappedDuo.html:153 templates/wrappedDuo.html:159
-#: templates/wrappedDuo.html:165
+#: templates/wrappedDuo.html:154 templates/wrappedDuo.html:160
+#: templates/wrappedDuo.html:166
 msgid "Compatible"
 msgstr "Compatible"
 
-#: templates/wrappedDuo.html:155
+#: templates/wrappedDuo.html:156
 msgid "You two are from different planets"
 msgstr "Ustedes dos son de planetas diferentes."
 
-#: templates/wrappedDuo.html:161
+#: templates/wrappedDuo.html:162
 msgid "You two might have similar tastes in music"
 msgstr "Puede que ambos tengan gustos musicales similares."
 
-#: templates/wrappedDuo.html:167
+#: templates/wrappedDuo.html:168
 msgid "You two might just be the same person"
 msgstr "Ustedes dos podrían ser la misma persona"
 
-#: templates/wrappedDuo.html:200
+#: templates/wrappedDuo.html:201
 msgid "LOVELY<br>vibes"
 msgstr "HERMOSAS<br>vibras"
 
-#: templates/wrappedDuo.html:203
+#: templates/wrappedDuo.html:204
 msgid "COOL<br>vibes"
 msgstr "BUENAS<br>vibras"
 
-#: templates/wrappedDuo.html:210
+#: templates/wrappedDuo.html:211
 msgid "DUO"
 msgstr "DÚO"
 
-#: templates/wrappedDuo.html:211
+#: templates/wrappedDuo.html:212
 msgid "PLAYLIST"
 msgstr "LISTA DE REPRODUCCIÓN"
 
-#: templates/wrappedDuo.html:216
+#: templates/wrappedDuo.html:217
 msgid "Duo Playlist"
 msgstr "Lista de dúos"
 
@@ -416,3 +480,39 @@ msgstr "Los últimos 6 meses"
 #: templates/wrappedSelect.html:137
 msgid "Last Year"
 msgstr "El año pasado"
+
+#~ msgid "January"
+#~ msgstr "Enero"
+
+#~ msgid "February"
+#~ msgstr "Febrero"
+
+#~ msgid "March"
+#~ msgstr "Marzo"
+
+#~ msgid "April"
+#~ msgstr "Abril"
+
+#~ msgid "May"
+#~ msgstr "Mayo"
+
+#~ msgid "June"
+#~ msgstr "Junio"
+
+#~ msgid "July"
+#~ msgstr "Julio"
+
+#~ msgid "August"
+#~ msgstr "Agosto"
+
+#~ msgid "September"
+#~ msgstr "Septiembre"
+
+#~ msgid "October"
+#~ msgstr "Octubre"
+
+#~ msgid "November"
+#~ msgstr "Noviembre"
+
+#~ msgid "December"
+#~ msgstr "Diciembre"
