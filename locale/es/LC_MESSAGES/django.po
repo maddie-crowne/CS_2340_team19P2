@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-01 00:12-0500\n"
+"POT-Creation-Date: 2024-12-01 03:32-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
+#: templates/accountInfo.html:7 templates/accountInfo.html:8
+#: templates/accountInfo.html:9
+msgid "Account Details"
+msgstr "Detalles de la cuenta"
+
 #: templates/contactDevelopers.html:7
 msgid "Contact the Developers"
 msgstr "Contacta con los desarrolladores"
@@ -27,11 +32,13 @@ msgstr "Contacta con los desarrolladores"
 msgid "Developer's Page"
 msgstr "Página del desarrollador"
 
-#: templates/contactDevelopers.html:70
+#: templates/contactDevelopers.html:70 templates/wrapped.html:69
+#: templates/wrappedDuo.html:83
 msgid "Contact Us"
 msgstr "Contacta con nosotras"
 
-#: templates/contactDevelopers.html:73
+#: templates/contactDevelopers.html:73 templates/wrapped.html:72
+#: templates/wrappedDuo.html:86
 msgid "Invite"
 msgstr "Invitar"
 
@@ -205,22 +212,20 @@ msgid "Loading…"
 msgstr "Cargando..."
 
 #: templates/error.html:8 templates/error.html:9 templates/error.html:10
-#, fuzzy
-#| msgid "Link to Spotify"
 msgid "Link to Spotify Error"
-msgstr "Enlace a Spotify"
+msgstr "Error en el enlace a Spotify"
 
 #: templates/error.html:40
 msgid "Failed to Authenticate"
-msgstr ""
+msgstr "Error al autenticarse"
 
 #: templates/error.html:45
 msgid "Try Again"
-msgstr ""
+msgstr "Intentar otra vez"
 
 #: templates/login.html:7 templates/login.html:9
 msgid "Login"
-msgstr ""
+msgstr "Acceso"
 
 #: templates/login.html:31
 msgid "Get your Spotify Wrapped."
@@ -276,6 +281,95 @@ msgstr "Apellido"
 msgid "Confirm Password"
 msgstr "Confirmar contraseña"
 
+#: templates/wrapped.html:117
+msgid "This is your Wrapped for the past month."
+msgstr "Este es tu Wrapped del último mes."
+
+#: templates/wrapped.html:119
+msgid "This is your Wrapped for the past 6 months."
+msgstr "Este es tu Wrapped de los últimos 6 meses."
+
+#: templates/wrapped.html:121
+msgid "This is your Wrapped for the past year."
+msgstr "Este es tu Wrapped del año pasado."
+
+#: templates/wrapped.html:136
+msgid "your mix has <br>LOVELY<br>vibes"
+msgstr "tu mezcla tiene unas vibraciones <br>HERMOSAS<br>"
+
+#: templates/wrapped.html:141 templates/wrapped.html:173
+msgid "TOP"
+msgstr "MEJORES"
+
+#: templates/wrapped.html:143
+msgid "TRACKS"
+msgstr "CANCIONES"
+
+#: templates/wrapped.html:148
+msgid "Your Top Track"
+msgstr "Canción favorita"
+
+#: templates/wrapped.html:175
+msgid "ARTISTS"
+msgstr "ARTISTAS"
+
+#: templates/wrapped.html:181
+msgid "Your Top Artist"
+msgstr "Tu músico estrella"
+
+#: templates/wrapped.html:207
+msgid "FAVORITE"
+msgstr "GÉNEROS"
+
+#: templates/wrapped.html:208
+msgid "GENRES"
+msgstr "FAVORITOS"
+
+#: templates/wrapped.html:212
+msgid "Your Favorite Genres"
+msgstr "Tus géneros favoritos"
+
+#: templates/wrappedDuo.html:138
+msgid "Last 6 Months"
+msgstr "Últimos 6 meses"
+
+#: templates/wrappedDuo.html:153 templates/wrappedDuo.html:159
+#: templates/wrappedDuo.html:165
+msgid "Compatible"
+msgstr "Compatible"
+
+#: templates/wrappedDuo.html:155
+msgid "You two are from different planets"
+msgstr "Ustedes dos son de planetas diferentes."
+
+#: templates/wrappedDuo.html:161
+msgid "You two might have similar tastes in music"
+msgstr "Puede que ambos tengan gustos musicales similares."
+
+#: templates/wrappedDuo.html:167
+msgid "You two might just be the same person"
+msgstr "Ustedes dos podrían ser la misma persona"
+
+#: templates/wrappedDuo.html:200
+msgid "LOVELY<br>vibes"
+msgstr "HERMOSAS<br>vibras"
+
+#: templates/wrappedDuo.html:203
+msgid "COOL<br>vibes"
+msgstr "BUENAS<br>vibras"
+
+#: templates/wrappedDuo.html:210
+msgid "DUO"
+msgstr "DÚO"
+
+#: templates/wrappedDuo.html:211
+msgid "PLAYLIST"
+msgstr "LISTA DE REPRODUCCIÓN"
+
+#: templates/wrappedDuo.html:216
+msgid "Duo Playlist"
+msgstr "Lista de dúos"
+
 #: templates/wrappedInvite.html:7 templates/wrappedInvite.html:8
 #: templates/wrappedInvite.html:9 templates/wrappedInvite.html:116
 msgid "DuoWrapped Invite"
@@ -299,22 +393,26 @@ msgstr ""
 
 #: templates/wrappedSelect.html:7 templates/wrappedSelect.html:8
 #: templates/wrappedSelect.html:9 templates/wrappedSelect.html:10
-#: templates/wrappedSelect.html:119
+#: templates/wrappedSelect.html:120
 msgid "Welcome"
 msgstr "Bienvenido"
 
-#: templates/wrappedSelect.html:119
+#: templates/wrappedSelect.html:120
 msgid "see your Wrapped from"
 msgstr "ver tu Wrapped desde de"
 
-#: templates/wrappedSelect.html:125
+#: templates/wrappedSelect.html:127
+msgid "[Select]"
+msgstr ""
+
+#: templates/wrappedSelect.html:131
 msgid "Last Month"
 msgstr "El ultimo mes"
 
-#: templates/wrappedSelect.html:127
+#: templates/wrappedSelect.html:134
 msgid "The Last 6 Months"
 msgstr "Los últimos 6 meses"
 
-#: templates/wrappedSelect.html:129
+#: templates/wrappedSelect.html:137
 msgid "Last Year"
 msgstr "El año pasado"
