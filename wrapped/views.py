@@ -386,13 +386,17 @@ def select(request):
 
 @login_required
 def invite(request):
-    """
-    Renders the invite page, allowing users to invite others to join.
+    access_token = request.session.get('spotify_access_token')
 
-    :param request: The HTTP request object associated with the user's session.
-    :return: HttpResponse: The rendered 'wrappedInvite.html' template for inviting others.
-    """
-    return render(request, 'wrappedInvite.html', {})
+    if not access_token:
+        return redirect('spotify_login')
+
+    # Retrieve Spotify user data
+    user_data = get_spotify_user_info(access_token)
+    
+    return render(request, 'wrappedInvite.html', {
+        'user_data': user_data
+    })
 
 
 @login_required
