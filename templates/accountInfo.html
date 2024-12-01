@@ -68,10 +68,10 @@
         <div class="navbar-wrapper-three">
             <ul role="list" class="nav-menu-block-2 w-list-unstyled">
                 <li>
-                    <a href="{% url 'wrapped:contact_developers' %}" class="nav-link-2">Contact Us</a>
+                    <a href="{% url 'wrapped:contact_developers' %}" class="nav-link-2">{% trans "Contact Us" %}</a>
                 </li>
                 <li>
-                    <a href="{% url 'wrapped:invite' %}" class="nav-link-2">Invite</a>
+                    <a href="{% url 'wrapped:invite' %}" class="nav-link-2">{% trans "Invite" %}</a>
                 </li>
                 <li>
                     <div data-hover="true" data-delay="0" class="nav-dropdown-2 w-dropdown">
@@ -112,7 +112,7 @@
 <div class="div-block-6">
     <div id="w-node-_50df189a-5ae4-4a77-e837-a4879f09f99f-3bfe6e2b">
         <div class="div-block-10">
-            <h1 class="heading-6"><strong class="bold-text-6">Saved Wraps</strong></h1>
+            <h1 class="heading-6"><strong class="bold-text-6">{% trans "Saved Wraps" %}</strong></h1>
             <div style="margin-left: -25px; height: 350px; overflow-y: auto;" class="div-block-4 wrap1">
                 <div class="saved-individual-wraps div-block-4 wrap2">
                     <ul role="list" class="list-2 wrap wrap2">
@@ -121,40 +121,37 @@
                                 <a href="{% url 'wrapped:view_saved_wrap' wrap.id %}?time_range={{ wrap.time_range }}">
                                     {% if wrap.time_range == 'short_term' %}
                                         <p style="height: 80%; width: 125%; white-space: normal; margin: 10px; padding: 10px 5px 0 5px;"
-                                           class="button-2 w-button"><strong class="bold-text-13">Monthly Wrap: <span
-                                                class="month-range"
-                                                data-created-at="{{ wrap.created_at }}"></span></strong></p>
+                                           class="button-2 w-button"><strong
+                                                class="bold-text-13">{% trans "Monthly Wrap" %} [{{ wrap.created_at }}]</strong></p>
                                     {% elif wrap.time_range == 'medium_term' %}
                                         <p style="height: 80%; width: 125%; white-space: normal; margin: 10px; padding: 10px 5px 0 5px;"
-                                           class="button-2 w-button"><strong class="bold-text-13">6 Month Wrap: <span
-                                                class="month-range"
-                                                data-created-at="{{ wrap.created_at }}"></span></strong></p>
+                                           class="button-2 w-button"><strong
+                                                class="bold-text-13">{% trans "6 Month Wrap" %} [{{ wrap.created_at }}]</strong></p>
                                     {% elif wrap.time_range == 'long_term' %}
                                         <p style="height: 80%; width: 125%; white-space: normal; margin: 10px; padding: 10px 5px 0 5px;"
-                                           class="button-2 w-button"><strong class="bold-text-13">Yearly Wrap: <span
-                                                class="month-range"
-                                                data-created-at="{{ wrap.created_at }}"></span></strong></p>
+                                           class="button-2 w-button"><strong
+                                                class="bold-text-13">{% trans "Yearly Wrap" %} [{{ wrap.created_at }}]</strong></p>
                                     {% endif %}
                                 </a>
 
                                 <!-- Delete Button -->
                                 <form action="{% url 'wrapped:delete_wrap' wrap.id %}" method="POST"
-                                      onsubmit="return confirm('Are you sure you want to unsave this wrap?');">
+                                      onsubmit="return confirm('{% trans "Are you sure you want to unsave this wrap?" %}');">
                                     {% csrf_token %}
                                     <button style="margin: 10px 0 0 100px" type="submit"
-                                            class="button-3 w-button delete-wrap-button">Delete
+                                            class="button-3 w-button delete-wrap-button">{% trans "Delete" %}
                                     </button>
                                 </form>
                             </li>
                         {% empty %}
-                            <li>No favorite wraps found.</li>
+                            <li>{% trans "No saved wraps found." %}</li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
         </div>
         <div class="div-block-9">
-            <h1 class="heading-6"><strong class="bold-text-6">Saved DuoWraps</strong></h1>
+            <h1 class="heading-6"><strong class="bold-text-6">{% trans "Saved DuoWraps" %}</strong></h1>
             <div style="margin-left: -25px; height: 350px; overflow-y: auto;" class="div-block-4 wrap1">
                 <div class="saved-duo-wraps div-block-4 wrap2">
                     <ul role="list" class="list-2 wrap wrap2">
@@ -164,18 +161,25 @@
                                     <p style="height: 80%; width: 125%; white-space: normal; margin: 10px; padding: 10px 5px 0 5px;"
                                        class="button-2 w-button">
                                         <strong class="bold-text-13">
-                                            {{ wrap.user1_data.display_name }} and {{ wrap.user2_data.display_name }}'s
-                                            6 Month DuoWrap {{ wrap.created_at|date:"m/d/y" }}
+                                            {{ wrap.user1_data.display_name }} {% trans "and" %} {{ wrap.user2_data.display_name }}'s
+                                            {% trans "6 Month DuoWrap" %}
+                                            {% get_current_language as language_code %}
+                                            {% if language_code == "en" %}
+                                                {{ wrap.created_at|date:"m/d/y" }}
+                                            {% elif language_code in "es fr" %}
+                                                {{ wrap.created_at|date:"d/m/y" }}
+                                            {% else %}
+                                                {{ wrap.created_at|date:"m/d/y" }}  {# Default format #}
+                                            {% endif %}
                                         </strong>
                                     </p>
                                 </a>
-
                                 <!-- Delete Button -->
                                 <form action="{% url 'wrapped:delete_duo_wrap' wrap.id %}" method="POST"
                                       id="delete-form-{{ wrap.id }}">
                                     {% csrf_token %}
                                     <button style="margin: 10px 0 0 100px" type="submit"
-                                            class="delete-wrap-button button-3 w-button">Delete
+                                            class="delete-wrap-button button-3 w-button">{% trans "Delete" %}
                                     </button>
                                 </form>
 
@@ -186,7 +190,7 @@
                                             e.preventDefault();
 
                                             // Show confirmation dialog
-                                            if (confirm('Are you sure you want to unsave this wrap?')) {
+                                            if (confirm('{% trans "Are you sure you want to unsave this wrap?" %}')) {
                                                 // If confirmed, submit the form normally
                                                 form.submit();
                                             } else {
@@ -198,7 +202,7 @@
                                 </script>
                             </li>
                         {% empty %}
-                            <li>No favorite wraps found.</li>
+                            <li>{% trans "No saved wraps found." %}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -210,29 +214,29 @@
         <div class="div-block-7">
             <img style="margin: 20px; border-radius: 100px;" width="178" height="178" sizes="178px" class="image-5"
                  src="{{ user_data.images.0.url }}"
-                 alt="Profile Picture"/>
+                 alt="{% trans 'Profile Picture' %}"/>
             <div class="text-block-6">
-                <strong class="bold-text-9">Account Details</strong>
+                <strong class="bold-text-9">{% trans "Account Details" %}</strong>
             </div>
             <button id="logout-button" onclick="window.location.href='{% url 'auth:logout' %}'"
-                    class="user-log-in-log-out-2">Log out
+                    class="user-log-in-log-out-2">{% trans "Log out" %}
             </button>
             <div class="w-layout-vflex flex-block-7">
                 <div class="text-block-11">
-                    <strong class="bold-text-10">Name: {{ user.first_name }} {{ user.last_name }}</strong>
+                    <strong class="bold-text-10">{% trans "Name" %}: {{ user.first_name }} {{ user.last_name }}</strong>
                 </div>
                 <div class="text-block-10">
-                    <strong class="bold-text-7">Email: {{ user.email }}</strong>
+                    <strong class="bold-text-7">{% trans "Email" %}: {{ user.email }}</strong>
                 </div>
                 <div class="text-block-9">
-                    <strong class="bold-text-8">Username: {{ user.username }}</strong>
+                    <strong class="bold-text-8">{% trans "Username" %}: {{ user.username }}</strong>
                 </div>
                 <form class="button-10 w-button" action="{% url 'auth:delete_account' %}" method="POST"
-                      onsubmit="return confirm('Are you sure you want to delete your account?');"
+                      onsubmit="return confirm('{% trans "Are you sure you want to delete your account?" %}');"
                       style="display: flex; justify-content: center; margin-top: 30px; width: 100%;">
                     {% csrf_token %}
                     <button type="submit" class="delete-account-button" style="padding: 10px 20px; font-size: 16px;">
-                        Delete Account
+                        {% trans "Delete Account" %}
                     </button>
                 </form>
             </div>
@@ -243,100 +247,6 @@
         type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
         crossorigin="anonymous"></script>
 <script src="/wrapped/static/webflow-wrapped.js" type="text/javascript"></script>
-<script>
-    // Array of month names
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-    // Function to parse non-standard date formats (like "Nov. 2, 2024, 2:11 p.m.")
-    function parseCustomDate(dateString) {
-        // Extract the date portion (e.g., "Nov. 2, 2024") and remove the time
-        const datePart = dateString.split(',')[0];
-
-        // Replace month abbreviation with full month name (if needed)
-        const monthAbbr = datePart.split(' ')[0].replace('.', '');
-        const monthIndex = months.findIndex(month => month.toLowerCase().startsWith(monthAbbr.toLowerCase()));
-
-        // Extract the year
-        const year = dateString.split(',')[1].trim();  // The part after the comma (e.g., "2024")
-
-        // Formatted date string with full month name, day, and year
-        const formattedDate = `${months[monthIndex]} ${datePart.split(' ')[1]}, ${year}`;
-        return new Date(formattedDate);
-    }
-
-    // Function to get month range
-    function getMonthRange(createdAt, timeRange) {
-        const createdDate = parseCustomDate(createdAt);
-        const currentMonth = createdDate.getMonth();
-        const currentYear = createdDate.getFullYear();
-
-        let startMonth, endMonth, startYear, endYear;
-
-        if (timeRange === 'short_term') {
-            // Monthly wrapped
-            startMonth = (currentMonth - 1 + 12) % 12;  // 5 months before
-            startYear = currentYear - (currentMonth - 1 < 0 ? 1 : 0); // Adjust year if needed
-            endMonth = currentMonth;
-            endYear = currentYear;
-        } else if (timeRange === 'medium_term') {
-            // 6 months wrapped
-            startMonth = (currentMonth - 5 + 12) % 12;  // 5 months before
-            startYear = currentYear - (currentMonth - 5 < 0 ? 1 : 0); // Adjust year if needed
-            endMonth = currentMonth;
-            endYear = currentYear;
-        } else if (timeRange === 'long_term') {
-            // Yearly wrapped
-            startMonth = (currentMonth - 12 + 12) % 12;  // 5 months before
-            startYear = currentYear - (currentMonth - 12 < 0 ? 1 : 0); // Adjust year if needed
-            endMonth = currentMonth;
-            endYear = currentYear;
-        }
-
-        // Format months and years for display
-        const startMonthName = months[startMonth];
-        const endMonthName = months[endMonth];
-
-        return `${startMonthName} ${startYear} - ${endMonthName} ${endYear}`;
-    }
-
-    // Add the month range to each "month-range" span
-    document.querySelectorAll('.month-range').forEach(function (element) {
-        const createdAt = element.getAttribute('data-created-at');
-        const timeRange = element.closest('li').querySelector('p').textContent.trim().toLowerCase().includes('monthly') ? 'short_term' :
-            element.closest('li').querySelector('p').textContent.trim().toLowerCase().includes('6 month') ? 'medium_term' :
-                'long_term';
-        const monthRange = getMonthRange(createdAt, timeRange);
-        element.textContent = monthRange;
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const savedDuoWrapsContainer = document.querySelector(".saved-duo-wraps");
-        const savedDuoWrapsList = savedDuoWrapsContainer.querySelector(".list-2");
-
-        // Function to adjust container size based on the number of items
-        function adjustContainerSize() {
-            const itemCount = savedDuoWrapsList.children.length;
-            if (itemCount > 0) {
-                savedDuoWrapsContainer.style.height = `${itemCount * 60 + 20}px`; // Adjust this to fit your design
-            } else {
-                savedDuoWrapsContainer.style.height = "auto"; // Shrinks when no items exist
-            }
-        }
-
-        // Adjust container size when a new item is added
-        document.querySelectorAll(".saved-duo-wraps form").forEach(function (form) {
-            form.addEventListener("submit", function (e) {
-                e.preventDefault(); // Prevents immediate submission to allow resizing
-                // Remove the wrap from the DOM (simulate delete)
-                form.closest("li").remove();
-                adjustContainerSize(); // Adjust the size after deletion
-            });
-        });
-
-        // Initial adjustment on page load
-        adjustContainerSize();
-    });
-</script>
 </body>
 </html>
 
