@@ -12,6 +12,16 @@ SPOTIFY_API_URL = "https://api.spotify.com/v1/me"
 @login_required
 # Redirect to Spotify login
 def spotify_login(request):
+    """
+    Redirects the user to the Spotify login page with the necessary
+    authentication parameters. This is the first step in the OAuth flow.
+
+    The user is redirected to Spotify's authorization URL to log in and
+    grant the application the necessary permissions.
+
+    :param request: The HTTP request object
+    :return: HttpResponseRedirect: Redirects to the Spotify login page for authentication.
+    """
     auth_url = (
         "https://accounts.spotify.com/authorize"
         "?response_type=code"
@@ -25,6 +35,17 @@ def spotify_login(request):
 
 # View user account info with Spotify data
 def get_spotify_token(auth_code):
+    """
+    Exchange the provided authorization code for an access token and refresh token
+    from Spotify's API.
+
+    This function is used to complete the OAuth flow by exchanging the authorization
+    code received from the Spotify API for access and refresh tokens, which are required
+    to make further authenticated requests to the Spotify API on behalf of the user.
+
+    :param auth_code: The authorization code returned by Spotify after the user logs in.
+    :return: dict: The response from Spotify, typically containing access and refresh tokens.
+    """
     token_url = "https://accounts.spotify.com/api/token"
 
     response = requests.post(token_url, data={
@@ -38,6 +59,16 @@ def get_spotify_token(auth_code):
     return response.json()
 
 def refresh_access_token(request):
+    """
+    Refresh the Spotify access token using the refresh token stored in the session.
+
+    If the access token has expired, this function retrieves a new access token using
+    the refresh token. The new access token is then stored in the session for subsequent
+    requests.
+
+    :param request: The HTTP request object containing the session with the refresh token.
+    :return: JsonResponse: A JSON response containing the new access token, or an error message if the refresh token is unavailable.
+    """
     refresh_token = request.session.get('refresh_token')
 
     if not refresh_token:
@@ -66,6 +97,18 @@ def refresh_access_token(request):
     return JsonResponse({'access_token': access_token})
 
 def spotify_callback(request):
+    """
+    Handles the callback from Spotify's OAuth flow, exchanging the authorization code
+    for an access token and fetching the user's Spotify profile data.
+
+    Once the authorization code is received from Spotify, this function exchanges it
+    for an access token, retrieves the user's profile data, and stores both in the session.
+    It then redirects to either a "duo" or "select" page based on the state parameter.
+
+    :param request: The HTTP request object, which contains the authorization code and state.
+    :return: HttpResponseRedirect: Redirects to the next page after authentication (either "duo" or "select").
+                Rendered response: If the authorization code is missing, renders an error page.
+    """
     code = request.GET.get('code')
     state = request.GET.get('state')
 

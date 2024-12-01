@@ -16,11 +16,25 @@ SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
 @login_required
 def user_spotify_login(request):
+    """
+    Renders the Spotify login page, requiring the user to be logged in.
+
+    :param request: The HTTP request object.
+    :return: HttpResponse: The rendered login page for Spotify authentication.
+    """
     return render(request, 'loginWithSpotify.html', {})
 
 
 @login_required
 def wrapped(request):
+    """
+    Retrieves and displays the user's Spotify Wrapped data, saves it to the database,
+    and renders the wrapped view. The data includes top artists, top tracks, top genres,
+    and average valence over a specified time range.
+
+    :param request: The HTTP request object, which should contain the access token and time range parameters.
+    :return: HttpResponse: The rendered Wrapped page displaying the user's Spotify stats.
+    """
     access_token = request.session.get('spotify_access_token')
 
     if not access_token:
@@ -60,6 +74,13 @@ def wrapped(request):
 
 @login_required
 def view_saved_wrap(request, wrap_id):
+    """
+    Retrieves and displays a specific saved Spotify Wrapped data for the current user by ID.
+
+    :param request: The HTTP request object.
+    :param wrap_id: The ID of the saved Spotify Wrapped data to retrieve.
+    :return: HttpResponse: The rendered Wrapped page displaying the saved Wrapped data.
+    """
     # Get the specific saved wrap by ID
     wrap = get_object_or_404(SaveWrap, id=wrap_id, user=request.user)  # Ensure it's the current user's wrap
 
@@ -83,6 +104,12 @@ def view_saved_wrap(request, wrap_id):
 
 
 def get_spotify_user_info(access_token):
+    """
+    Fetches the current user's profile information from the Spotify API.
+
+    :param access_token: The user's Spotify access token for authentication.
+    :return: dict: The JSON response containing the user's profile information.
+    """
     headers = {
         'Authorization': f'Bearer {access_token}',
         'Content-Type': 'application/json'
@@ -92,6 +119,20 @@ def get_spotify_user_info(access_token):
 
 
 def get_spotify_top_data(access_token, time_range):
+    """
+    Retrieves the user's top artists, top genres, top tracks, average valence,
+    and associated songs for a given time range using the Spotify API.
+
+    :param access_token: The user's Spotify access token for authentication.
+    :param time_range: The time range to query for top artists, tracks, and genres (e.g., 'short_term', 'medium_term', 'long_term').
+    :return: tuple: A tuple containing:
+            - top_artists (list): The user's top artists.
+            - genre_list (list): A list of the user's top genres.
+            - top_tracks_data (dict): The user's top tracks.
+            - average_valence (float): The average valence of the user's top tracks.
+            - ordered_artist_songs (dict): A dictionary of top artists and their songs.
+            - genre_songs (dict): A dictionary of genres and associated tracks.
+    """
     # Top Artists
     url = "https://api.spotify.com/v1/me/top/artists"
     headers = {"Authorization": f"Bearer {access_token}"}
@@ -196,6 +237,12 @@ def get_spotify_top_data(access_token, time_range):
 
     # Function to get artist genres with caching
     def get_artist_genres_cached(artist_id):
+        """
+        Fetches the genres of a specific artist, caching the result for efficiency.
+
+        :param artist_id: The Spotify ID of the artist.
+        :return: A list of genres associated with the artist.
+        """
         if artist_id in artist_genre_cache:
             return artist_genre_cache[artist_id]
 
@@ -234,6 +281,13 @@ def get_spotify_top_data(access_token, time_range):
 
 
 def get_artist_songs(access_token, artist_id):
+    """
+    Fetches the top tracks of a specific artist from Spotify based on their artist ID.
+
+    :param access_token: The Spotify access token for authentication.
+    :param artist_id: The Spotify ID of the artist whose top tracks are to be retrieved.
+    :return: list: A list of top tracks for the given artist, where each track is represented as a dictionary.
+    """
     url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks"
     headers = {"Authorization": f"Bearer {access_token}"}
     params = {
@@ -277,8 +331,16 @@ def account(request):
 
     return render(request, 'accountInfo.html', context)
 
+
 @login_required
 def delete_wrap(request, wrap_id):
+    """
+    Deletes a saved wrap based on the provided wrap ID, and redirects to the user's account page.
+
+    :param request: The HTTP request object.
+    :param wrap_id: The ID of the wrap to be deleted.
+    :return: HttpResponseRedirect: Redirects to the 'account' page after deleting the wrap.
+    """
     if request.method == 'POST':
         wrap = SaveWrap.objects.get(id=wrap_id, user=request.user)
         wrap.delete()
@@ -287,6 +349,13 @@ def delete_wrap(request, wrap_id):
 
 @login_required
 def delete_duo_wrap(request, wrap_id):
+    """
+    Deletes a saved duo wrap based on the provided wrap ID, and redirects to the user's account page.
+
+    :param request: The HTTP request object.
+    :param wrap_id: The ID of the duo wrap to be deleted.
+    :return: HttpResponseRedirect: Redirects to the 'account' page after deleting the duo wrap.
+    """
     if request.method == 'POST':
         wrap = SaveDuoWrap.objects.get(id=wrap_id, user=request.user)
         wrap.delete()
@@ -295,6 +364,12 @@ def delete_duo_wrap(request, wrap_id):
 
 @login_required
 def select(request):
+    """
+    Renders the select page with the user's Spotify profile data for choosing a wrap option.
+
+    :param request: The HTTP request object associated with the user's session.
+    :return: HttpResponse: The rendered 'wrappedSelect.html' template displaying the user's Spotify data.
+    """
     access_token = request.session.get('spotify_access_token')
 
     if not access_token:
@@ -311,12 +386,25 @@ def select(request):
 
 @login_required
 def invite(request):
+    """
+    Renders the invite page, allowing users to invite others to join.
+
+    :param request: The HTTP request object associated with the user's session.
+    :return: HttpResponse: The rendered 'wrappedInvite.html' template for inviting others.
+    """
     return render(request, 'wrappedInvite.html', {})
 
 
 @login_required
 # Redirect to Spotify login
 def duo_spotify_login(request):
+    """
+    Redirects the user to Spotify's authorization page for Duo login. This allows users to log in
+    and authenticate via Spotify for the purpose of sharing wrap data between two users.
+
+    :param request: The HTTP request object associated with the user's session.
+    :return: HttpResponseRedirect: A redirect to Spotify's authorization page for Duo login.
+    """
     auth_url = (
         "https://accounts.spotify.com/authorize"
         "?response_type=code"
@@ -331,6 +419,12 @@ def duo_spotify_login(request):
 
 # View user account info with Spotify data
 def get_spotify_token(auth_code):
+    """
+    Retrieves an access token from Spotify using the provided authorization code.
+
+    :param auth_code: The authorization code received after the user logs in via Spotify.
+    :return: dict: A JSON response containing the access token and refresh token (if applicable).
+    """
     token_url = "https://accounts.spotify.com/api/token"
 
     response = requests.post(token_url, data={
@@ -345,6 +439,12 @@ def get_spotify_token(auth_code):
 
 
 def refresh_access_token(request):
+    """
+    Refreshes the Spotify access token using the stored refresh token from the session.
+
+    :param request: The HTTP request object associated with the user's session.
+    :return: JsonResponse: A JSON response containing the new access token or an error message if the refresh token is missing.
+    """
     refresh_token = request.session.get('refresh_token')
 
     if not refresh_token:
@@ -374,6 +474,14 @@ def refresh_access_token(request):
 
 
 def spotify_callback(request):
+    """
+    Handles the Spotify OAuth callback by exchanging the authorization code for an access token,
+    fetching the user's Spotify profile, and saving the necessary data in the session.
+
+    :param request: The HTTP request object containing the authorization code and state parameter.
+    :return: HttpResponseRedirect: Redirects to the appropriate page after successful authentication (either 'duo' or 'select').
+                HttpResponse: Renders an error page if authentication fails due to missing code.
+    """
     code = request.GET.get('code')
     state = request.GET.get('state')
 
@@ -420,6 +528,14 @@ def spotify_callback(request):
 
 @login_required
 def duo(request):
+    """
+    Renders the duo wrapped page, calculates the compatibility between two users based on their top Spotify artists,
+    tracks, and audio features. Saves the wrap data and displays the results.
+
+    :param request: The HTTP request object associated with the user's session.
+    :return: HttpResponseRedirect: Redirects to the login page if the user is not authenticated or if Spotify data is missing.
+                HttpResponse: Renders the 'wrappedDuo.html' template with the calculated compatibility and Spotify data for both users.
+    """
     access_token_user1 = request.session.get('spotify_access_token')
     profile_user1 = request.session.get('spotify_profile')
 
@@ -543,6 +659,17 @@ def duo(request):
 # Function to calculate compatibility
 def calculate_compatibility(top_artists_user1, top_tracks_user1, averages_user1, top_artists_user2, top_tracks_user2,
                             averages_user2):
+    """
+    Calculates the compatibility score between two users based on their top Spotify artists, tracks, and audio features.
+
+    :param top_artists_user1: The top artists data for user 1 from Spotify.
+    :param top_tracks_user1: The top tracks data for user 1 from Spotify.
+    :param averages_user1: The average audio features for user 1's top tracks.
+    :param top_artists_user2: The top artists data for user 2 from Spotify.
+    :param top_tracks_user2: The top tracks data for user 2 from Spotify.
+    :param averages_user2: The average audio features for user 2's top tracks.
+    :return: The compatibility score between 0 and 100, based on matching artists, tracks, and audio features.
+    """
     # Calculate the percentage of matching artists
     artists_user1 = set([artist['id'] for artist in top_artists_user1['items']])
     artists_user2 = set([artist['id'] for artist in top_artists_user2['items']])
@@ -572,6 +699,13 @@ def calculate_compatibility(top_artists_user1, top_tracks_user1, averages_user1,
 
 # Function to get the audio features of multiple tracks
 def get_audio_features(access_token, track_ids):
+    """
+    Fetches the audio features of multiple tracks from the Spotify API.
+
+    :param access_token: The OAuth access token for the authenticated user.
+    :param track_ids: A list of track IDs to fetch the audio features for.
+    :return: A list of audio feature dictionaries for each track, or an empty list if the request fails.
+    """
     url = "https://api.spotify.com/v1/audio-features"
     headers = {"Authorization": f"Bearer {access_token}"}
     params = {
@@ -585,6 +719,12 @@ def get_audio_features(access_token, track_ids):
 
 # Calculate averages for valence, danceability, energy, instrumentalness, and tempo
 def calculate_averages(audio_features_data):
+    """
+    Calculates the average values for specific audio features: valence, danceability, energy, instrumentalness, and tempo.
+
+    :param audio_features_data: A list of audio feature dictionaries for multiple tracks.
+    :return: A tuple containing the average valence value and a dictionary with the average values for each feature.
+    """
     features = {
         'valence': [],
         'danceability': [],
@@ -612,6 +752,15 @@ def calculate_averages(audio_features_data):
 
 @login_required
 def view_saved_duo_wrap(request, wrap_id):
+    """
+    Retrieves and displays the details of a saved duo wrap based on the provided wrap ID.
+
+    The saved wrap includes user data, compatibility score, valence values, top tracks, and interleaved preview URLs.
+
+    :param request: The HTTP request object associated with the current user.
+    :param wrap_id: The ID of the saved wrap to retrieve and display.
+    :return: HttpResponse: Renders the 'wrappedDuo.html' template with the saved wrap data.
+    """
     # Get the specific saved wrap by ID
     wrap = get_object_or_404(SaveDuoWrap, id=wrap_id, user=request.user)  # Ensure it's the current user's wrap
 
@@ -644,4 +793,3 @@ def contact_developers(request):
     :return: Renders the 'contactDevelopers.html' template.
     """
     return render(request, 'contactDevelopers.html', {})
-

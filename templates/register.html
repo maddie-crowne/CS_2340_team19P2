@@ -19,13 +19,33 @@
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
     <script type="text/javascript">WebFont.load({google: {families: ["Lato:100,100italic,300,300italic,400,400italic,700,700italic,900,900italic", "Varela Round:400"]}});</script>
     <script type="text/javascript">
+        /**
+         * This script adds classes to the HTML document element based on the environment
+         * (JavaScript support and touch capability), and includes links to favicon and Apple touch icon.
+         *
+         * 1. Adds a "js" class if JavaScript is supported.
+         * 2. Adds a "touch" class if the device supports touch events.
+         * 3. Sets favicon and Apple touch icon links in the HTML head.
+         *
+         * @function
+         * @param {Window} o - The global `window` object.
+         * @param {Document} c - The global `document` object.
+         */
         !function (o, c) {
-            var n = c.documentElement, t = " w-mod-";
-            n.className += t + "js",
-            ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
-        }
-        (window, document);
-    </script>
+            // Get the root document element
+            var n = c.documentElement,
+                // Define a prefix for classes
+                t = " w-mod-";
+
+            // Add 'js' class to indicate JavaScript support
+            n.className += t + "js";
+
+            // Check if the device supports touch events (for touch devices)
+            if ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) {
+                // Add 'touch' class for touch-enabled devices
+                n.className += t + "touch";
+            }
+        }(window, document);</script>
     <link href="../wrapped/static/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="../wrapped/static/images/webclip.png" rel="apple-touch-icon">
 </head>
