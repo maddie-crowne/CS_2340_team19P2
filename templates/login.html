@@ -22,10 +22,123 @@
     }(window, document);</script>
     <link href="../wrapped/static/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="../wrapped/static/webclip.png" rel="apple-touch-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Toggle dropdown when clicking the toggle button
+            $('.w-dropdown-toggle').click(function (event) {
+                $(this).closest('.w-dropdown').toggleClass('open');
+                event.stopPropagation();  // Prevents the click from propagating to the document
+            });
+
+            // Close the dropdown when clicking outside
+            $(document).click(function (event) {
+                if (!$(event.target).closest('.w-dropdown').length) {
+                    // If the click was outside the dropdown, close it
+                    $('.w-dropdown').removeClass('open');
+                }
+            });
+
+            // Prevent closing the dropdown when clicking inside the dropdown
+            $('.w-dropdown').click(function (event) {
+                event.stopPropagation();  // Prevents click inside the dropdown from closing it
+            });
+        });
+    </script>
+
+    <!-- Custom CSS to show language dropdown -->
+    <style>
+        .w-dropdown-list {
+            display: none;
+        }
+
+        .w-dropdown.open .w-dropdown-list {
+            display: block;
+        }
+
+        /* Make the navbar transparent */
+        /* Center the content of the navbar */
+        .navbar-logo-center-container {
+            background-color: transparent !important;
+            box-shadow: none !important; /* Removes any shadow that might be creating the gray bar */
+
+            /* Apply Flexbox */
+            display: flex;
+            justify-content: center; /* Center the child elements horizontally */
+            align-items: center; /* Center the child elements vertically, if needed */
+        }
+
+        /* Dropdown container */
+        .nav-dropdown-2 {
+            position: relative; /* Ensures the dropdown list appears below the button */
+            margin-top: 20px; /* Adjust this value to add space above the dropdown */
+            display: flex;
+            justify-content: center; /* Center the dropdown toggle */
+        }
+
+        /* Dropdown list positioning and styling */
+        .nav-dropdown-list-2 {
+            position: absolute; /* Ensures the dropdown list appears below the toggle */
+            top: 100%; /* Positions it right below the dropdown toggle */
+            left: 50%;
+            transform: translateX(-50%); /* Centers the dropdown horizontally */
+            display: none; /* Keeps it hidden by default */
+        }
+
+        /* Show dropdown when it's active */
+        .w-dropdown.open .nav-dropdown-list-2 {
+            display: block; /* Shows the dropdown when open */
+        }
+
+        /* Increase font size of the dropdown items */
+        .nav-dropdown-list-2 .w-dropdown-link-2 {
+            font-size: 20px; /* Adjust this value to increase the font size of the dropdown items */
+            padding: 10px 20px; /* Optional: Add padding to the dropdown items */
+        }
+
+        /* Optional: Add some spacing between the dropdown items */
+        .nav-dropdown-list-2 .w-dropdown-link-2 + .w-dropdown-link-2 {
+            margin-top: 5px; /* Adjust this value to add space between items */
+        }
+    </style>
 </head>
 <body class="body">
 <div class="frame-6">
     <div class="text-block">[ Wrapped ]</div>
+</div>
+
+<div class="navbar-logo-center">
+    <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease"
+         role="banner" class="navbar-logo-center-container shadow-three w-nav">
+        <div class="navbar-wrapper-three">
+                    <div data-hover="true" data-delay="0" class="nav-dropdown-2 w-dropdown">
+                        <div class="nav-dropdown-toggle-2 w-dropdown-toggle">
+                            <div class="nav-dropdown-icon-2 w-icon-dropdown-toggle"></div>
+                            <div style="font-size: 20px;">
+                                {% get_current_language as language_code %}
+                                {{ language_code|upper }}
+                            </div>
+                        </div>
+                        <nav class="nav-dropdown-list-2 shadow-three mobile-shadow-hide w-dropdown-list">
+                            <!-- Language switch form -->
+                            <form action="{% url 'set_language' %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" name="language" value="en"
+                                        class="nav-dropdown-link-2 w-dropdown-link">EN
+                                </button>
+                                <button type="submit" name="language" value="es"
+                                        class="nav-dropdown-link-2 w-dropdown-link">ES
+                                </button>
+                                <button type="submit" name="language" value="fr"
+                                        class="nav-dropdown-link-2 w-dropdown-link">FR
+                                </button>
+                            </form>
+                        </nav>
+                    </div>
+            <div class="menu-button-2 w-nav-button"></div>
+        </div>
+        <div class="menu-button-2 w-nav-button"></div>
+    </div>
 </div>
 
 <div class="text-block-2">{% trans "Get your Spotify Wrapped." %}</div>
@@ -69,4 +182,3 @@
         crossorigin="anonymous"></script>
 <script src="dummyFrontend/loginPage/js/webflow.js" type="text/javascript"></script>
 </body>
-</html>
