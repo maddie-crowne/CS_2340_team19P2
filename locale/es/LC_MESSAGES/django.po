@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-01 04:46-0500\n"
+"POT-Creation-Date: 2024-12-01 17:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,85 +20,87 @@ msgstr ""
 "1 : 2;\n"
 
 #: templates/accountInfo.html:7 templates/accountInfo.html:8
-#: templates/accountInfo.html:9 templates/accountInfo.html:219
+#: templates/accountInfo.html:9 templates/accountInfo.html:291
 msgid "Account Details"
 msgstr "Detalles de la cuenta"
 
-#: templates/accountInfo.html:71 templates/contactDevelopers.html:70
-#: templates/wrapped.html:69 templates/wrappedDuo.html:84
+#: templates/accountInfo.html:129 templates/contactDevelopers.html:128
+#: templates/wrapped.html:127 templates/wrappedDuo.html:142
+#: templates/wrappedSelect.html:130
 msgid "Contact Us"
 msgstr "Contacta con nosotras"
 
-#: templates/accountInfo.html:74 templates/contactDevelopers.html:73
-#: templates/wrapped.html:72 templates/wrappedDuo.html:87
+#: templates/accountInfo.html:132 templates/contactDevelopers.html:131
+#: templates/wrapped.html:130 templates/wrappedDuo.html:145
+#: templates/wrappedSelect.html:133
 msgid "Invite"
 msgstr "Invitar"
 
-#: templates/accountInfo.html:115
+#: templates/accountInfo.html:175
 msgid "Saved Wraps"
 msgstr "Wraps guardados"
 
-#: templates/accountInfo.html:125
+#: templates/accountInfo.html:185
 msgid "Monthly Wrap"
 msgstr "Wrap mensual"
 
-#: templates/accountInfo.html:129
+#: templates/accountInfo.html:190
 msgid "6 Month Wrap"
 msgstr "6 meses Wrap"
 
-#: templates/accountInfo.html:133
+#: templates/accountInfo.html:195
 msgid "Yearly Wrap"
 msgstr "Wrap anual"
 
-#: templates/accountInfo.html:139 templates/accountInfo.html:193
+#: templates/accountInfo.html:202 templates/accountInfo.html:265
 msgid "Are you sure you want to unsave this wrap?"
 msgstr "¿Estás seguro que deseas eliminar este wrap?"
 
-#: templates/accountInfo.html:142 templates/accountInfo.html:182
+#: templates/accountInfo.html:205 templates/accountInfo.html:245
 msgid "Delete"
 msgstr "Borrar"
 
-#: templates/accountInfo.html:147 templates/accountInfo.html:205
+#: templates/accountInfo.html:210 templates/accountInfo.html:277
 msgid "No saved wraps found."
 msgstr "No se encontraron wraps guardados."
 
-#: templates/accountInfo.html:154
+#: templates/accountInfo.html:217
 msgid "Saved DuoWraps"
 msgstr "DuoWraps guardados"
 
-#: templates/accountInfo.html:164
+#: templates/accountInfo.html:227
 msgid "and"
 msgstr "y"
 
-#: templates/accountInfo.html:165
+#: templates/accountInfo.html:228
 msgid "6 Month DuoWrap"
 msgstr "DuoWrap de 6 meses"
 
-#: templates/accountInfo.html:217
+#: templates/accountInfo.html:289
 msgid "Profile Picture"
 msgstr "Foto de perfil"
 
-#: templates/accountInfo.html:222
+#: templates/accountInfo.html:294
 msgid "Log out"
 msgstr "Cerrar sesión"
 
-#: templates/accountInfo.html:226
+#: templates/accountInfo.html:298
 msgid "Name"
 msgstr "Nombre"
 
-#: templates/accountInfo.html:229
+#: templates/accountInfo.html:301
 msgid "Email"
 msgstr "Dirección de correo electrónico"
 
-#: templates/accountInfo.html:232 templates/register.html:51
+#: templates/accountInfo.html:304 templates/register.html:71
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: templates/accountInfo.html:235
+#: templates/accountInfo.html:307
 msgid "Are you sure you want to delete your account?"
 msgstr "¿Estás seguro de que quieres eliminar tu cuenta?"
 
-#: templates/accountInfo.html:239
+#: templates/accountInfo.html:311
 msgid "Delete Account"
 msgstr "Eliminar cuenta"
 
@@ -110,20 +112,20 @@ msgstr "Contacta con los desarrolladores"
 msgid "Developer's Page"
 msgstr "Página del desarrollador"
 
-#: templates/contactDevelopers.html:114
+#: templates/contactDevelopers.html:174
 msgid "Meet Our Team"
 msgstr "Conozca a nuestro equipo"
 
-#: templates/contactDevelopers.html:120 templates/contactDevelopers.html:123
+#: templates/contactDevelopers.html:180 templates/contactDevelopers.html:183
 msgid "Scrum Master"
 msgstr "Maestra de scrum"
 
-#: templates/contactDevelopers.html:120 templates/contactDevelopers.html:125
-#: templates/contactDevelopers.html:152
+#: templates/contactDevelopers.html:180 templates/contactDevelopers.html:185
+#: templates/contactDevelopers.html:212
 msgid "Front-end Developer"
 msgstr "Desarrolladora front-end"
 
-#: templates/contactDevelopers.html:123
+#: templates/contactDevelopers.html:183
 msgid ""
 "As Scrum Master, Pranati ensured the team’s workflow ran smoothly, "
 "addressing any obstacles and keeping the project on track during sprints."
@@ -132,7 +134,7 @@ msgstr ""
 "se desarrollara sin problemas, abordando cualquier obstáculo y manteniendo "
 "el proyecto encaminado durante los sprints."
 
-#: templates/contactDevelopers.html:125
+#: templates/contactDevelopers.html:185
 msgid ""
 "Pranati helped Denise Wall create Figma wireframes for the website’s layout. "
 "She was also involved in getting the basic layouts translated into Webflow, "
@@ -144,19 +146,19 @@ msgstr ""
 "Webflow, lo que permitió al equipo crear y perfeccionar visualmente la "
 "interfaz del sitio web con facilidad."
 
-#: templates/contactDevelopers.html:131
+#: templates/contactDevelopers.html:191
 msgid "Product Manager"
 msgstr "Gerente de Producto"
 
-#: templates/contactDevelopers.html:131 templates/contactDevelopers.html:162
+#: templates/contactDevelopers.html:191 templates/contactDevelopers.html:222
 msgid "Full Stack Developer"
 msgstr "Desarrolladora de pila completa"
 
-#: templates/contactDevelopers.html:134
+#: templates/contactDevelopers.html:194
 msgid "Project Management"
 msgstr "Gestión de proyectos"
 
-#: templates/contactDevelopers.html:134
+#: templates/contactDevelopers.html:194
 msgid ""
 "As the Product Owner, Katherine was responsible for prioritizing user "
 "stories, coordinating sprint planning, and making sure the team stayed "
@@ -167,11 +169,11 @@ msgstr ""
 "asegurarse de que el equipo se mantuviera alineado con los objetivos del "
 "proyecto."
 
-#: templates/contactDevelopers.html:135
+#: templates/contactDevelopers.html:195
 msgid "Full-Stack Development"
 msgstr "Desarrollo completo"
 
-#: templates/contactDevelopers.html:135
+#: templates/contactDevelopers.html:195
 msgid ""
 "Katherine played a crucial role in bridging front-end and back-end "
 "development, ensuring smooth integration and consistency. She addressed "
@@ -182,15 +184,15 @@ msgstr ""
 "Abordó las inconsistencias en el diseño de la interfaz de usuario cuando se "
 "mostraban datos dinámicos."
 
-#: templates/contactDevelopers.html:142
+#: templates/contactDevelopers.html:202
 msgid "Back-end Developer"
 msgstr "Desarrollador back-end"
 
-#: templates/contactDevelopers.html:144 templates/contactDevelopers.html:164
+#: templates/contactDevelopers.html:204 templates/contactDevelopers.html:224
 msgid "API Integration"
 msgstr "Integración API"
 
-#: templates/contactDevelopers.html:144
+#: templates/contactDevelopers.html:204
 msgid ""
 "Samrita worked extensively with the Spotify API to retrieve users’ listening "
 "data, generate personalized wrapped statistics, and calculate compatibility. "
@@ -201,11 +203,11 @@ msgstr ""
 "y calcular la compatibilidad. También agregó soporte en varios idiomas para "
 "el sitio."
 
-#: templates/contactDevelopers.html:145
+#: templates/contactDevelopers.html:205
 msgid "Database Management"
 msgstr "Base de datos de mangamento"
 
-#: templates/contactDevelopers.html:145
+#: templates/contactDevelopers.html:205
 msgid ""
 "Samrita contributed to the backend database setup, ensuring that user-"
 "generated data, such as Spotify Wrapped results, was correctly stored and "
@@ -216,11 +218,11 @@ msgstr ""
 "Spotify Wrapped, se almacenaran y recuperaran correctamente cuando fuera "
 "necesario para la administración y los detalles de la cuenta."
 
-#: templates/contactDevelopers.html:154
+#: templates/contactDevelopers.html:214
 msgid "User Interface Design"
 msgstr "Diseño de interfaz de usuario"
 
-#: templates/contactDevelopers.html:154
+#: templates/contactDevelopers.html:214
 msgid ""
 "Denise worked alongside Pranati Duvvuri to design and refine the user "
 "interface. She utilized Figma to create low-fidelity and high-fidelity "
@@ -231,11 +233,11 @@ msgstr ""
 "y baja fidelidad, finalizando elementos de diseño clave y funciones "
 "interactivas."
 
-#: templates/contactDevelopers.html:155
+#: templates/contactDevelopers.html:215
 msgid "Mood Board & Chrome Theme"
 msgstr "Panel de estado de ánimo y tema de Chrome"
 
-#: templates/contactDevelopers.html:155
+#: templates/contactDevelopers.html:215
 msgid ""
 "Denise made several mood boards for the website layout to help the team hone "
 "down on a visual direction and style of the site. She also played a key role "
@@ -248,7 +250,7 @@ msgstr ""
 "sitio web, asegurándose de que fuera coherente con la marca general. y "
 "estético."
 
-#: templates/contactDevelopers.html:164
+#: templates/contactDevelopers.html:224
 msgid ""
 "Maddie worked closely with Samrita Shetty and Katherine Sanders to integrate "
 "the Spotify API to retrieve user listening data and power the personalized "
@@ -258,11 +260,11 @@ msgstr ""
 "Sanders para integrar la API de Spotify para recuperar datos de escucha de "
 "los usuarios y potenciar las estadísticas empaquetadas personalizadas."
 
-#: templates/contactDevelopers.html:165
+#: templates/contactDevelopers.html:225
 msgid "Collaboration with Full-Stack"
 msgstr "Colaboración con pila completa"
 
-#: templates/contactDevelopers.html:165
+#: templates/contactDevelopers.html:225
 msgid ""
 "Maddie worked alongside Katherine Sanders to ensure that the backend could "
 "support the dynamic features required by the front-end team, helping both "
@@ -275,7 +277,7 @@ msgstr ""
 "completa a integrar funciones como la autenticación de usuarios y la "
 "visualización de datos empaquetados."
 
-#: templates/contactDevelopers.html:176
+#: templates/contactDevelopers.html:236
 msgid "Loading…"
 msgstr "Cargando..."
 
@@ -283,11 +285,11 @@ msgstr "Cargando..."
 msgid "Link to Spotify Error"
 msgstr "Error en el enlace a Spotify"
 
-#: templates/error.html:40
+#: templates/error.html:64
 msgid "Failed to Authenticate"
 msgstr "Error al autenticarse"
 
-#: templates/error.html:45
+#: templates/error.html:69
 msgid "Try Again"
 msgstr "Intentar otra vez"
 
@@ -295,159 +297,159 @@ msgstr "Intentar otra vez"
 msgid "Login"
 msgstr "Acceso"
 
-#: templates/login.html:31
+#: templates/login.html:203
 msgid "Get your Spotify Wrapped."
 msgstr "Obtenga su Spotify Wrapped."
 
-#: templates/login.html:39 templates/register.html:69
+#: templates/login.html:211 templates/register.html:89
 msgid "Email Address"
 msgstr "Dirección de correo electrónico"
 
-#: templates/login.html:45 templates/register.html:75
+#: templates/login.html:217 templates/register.html:95
 msgid "Password"
 msgstr "Contraseña"
 
-#: templates/login.html:50
+#: templates/login.html:222
 msgid "Sign In"
 msgstr "Iniciar sesión"
 
-#: templates/login.html:51
+#: templates/login.html:223
 msgid "Don’t have an account? Register here!"
 msgstr "¿No tienes una cuenta? Regístrate aquí!"
 
 #: templates/loginWithSpotify.html:8 templates/loginWithSpotify.html:9
-#: templates/loginWithSpotify.html:10 templates/loginWithSpotify.html:40
+#: templates/loginWithSpotify.html:10 templates/loginWithSpotify.html:64
 msgid "Link to Spotify"
 msgstr "Enlace a Spotify"
 
-#: templates/loginWithSpotify.html:45
+#: templates/loginWithSpotify.html:69
 msgid "Click here to Link"
 msgstr "Haga clic aquí para vincular"
 
 #: templates/register.html:8 templates/register.html:9
-#: templates/register.html:10 templates/register.html:87
+#: templates/register.html:10 templates/register.html:107
 msgid "Register"
 msgstr "Registro"
 
-#: templates/register.html:42
+#: templates/register.html:62
 msgid "Sign Up"
 msgstr "Inscribirse"
 
-#: templates/register.html:57
+#: templates/register.html:77
 msgid "First Name"
 msgstr "Nombre de pila"
 
-#: templates/register.html:63
+#: templates/register.html:83
 msgid "Last Name"
 msgstr "Apellido"
 
-#: templates/register.html:81
+#: templates/register.html:101
 msgid "Confirm Password"
 msgstr "Confirmar contraseña"
 
-#: templates/wrapped.html:117
+#: templates/wrapped.html:177
 msgid "This is your Wrapped for the past month."
 msgstr "Este es tu Wrapped del último mes."
 
-#: templates/wrapped.html:119
+#: templates/wrapped.html:179
 msgid "This is your Wrapped for the past 6 months."
 msgstr "Este es tu Wrapped de los últimos 6 meses."
 
-#: templates/wrapped.html:121
+#: templates/wrapped.html:181
 msgid "This is your Wrapped for the past year."
 msgstr "Este es tu Wrapped del año pasado."
 
-#: templates/wrapped.html:136
+#: templates/wrapped.html:197
 msgid "your mix has <br>LOVELY<br>vibes"
 msgstr "tu mezcla tiene unas vibraciones <br>HERMOSAS<br>"
 
-#: templates/wrapped.html:141 templates/wrapped.html:173
+#: templates/wrapped.html:203 templates/wrapped.html:245
 msgid "TOP"
 msgstr "MEJORES"
 
-#: templates/wrapped.html:143
+#: templates/wrapped.html:205
 msgid "TRACKS"
 msgstr "CANCIONES"
 
-#: templates/wrapped.html:148
+#: templates/wrapped.html:219
 msgid "Your Top Track"
 msgstr "Canción favorita"
 
-#: templates/wrapped.html:175
+#: templates/wrapped.html:247
 msgid "ARTISTS"
 msgstr "ARTISTAS"
 
-#: templates/wrapped.html:181
+#: templates/wrapped.html:262
 msgid "Your Top Artist"
 msgstr "Tu músico estrella"
 
-#: templates/wrapped.html:207
+#: templates/wrapped.html:288
 msgid "FAVORITE"
 msgstr "GÉNEROS"
 
-#: templates/wrapped.html:208
+#: templates/wrapped.html:289
 msgid "GENRES"
 msgstr "FAVORITOS"
 
-#: templates/wrapped.html:212
+#: templates/wrapped.html:302
 msgid "Your Favorite Genres"
 msgstr "Tus géneros favoritos"
 
-#: templates/wrappedDuo.html:139
+#: templates/wrappedDuo.html:199
 msgid "Last 6 Months"
 msgstr "Últimos 6 meses"
 
-#: templates/wrappedDuo.html:154 templates/wrappedDuo.html:160
-#: templates/wrappedDuo.html:166
+#: templates/wrappedDuo.html:215 templates/wrappedDuo.html:221
+#: templates/wrappedDuo.html:227
 msgid "Compatible"
 msgstr "Compatible"
 
-#: templates/wrappedDuo.html:156
+#: templates/wrappedDuo.html:217
 msgid "You two are from different planets"
 msgstr "Ustedes dos son de planetas diferentes."
 
-#: templates/wrappedDuo.html:162
+#: templates/wrappedDuo.html:223
 msgid "You two might have similar tastes in music"
 msgstr "Puede que ambos tengan gustos musicales similares."
 
-#: templates/wrappedDuo.html:168
+#: templates/wrappedDuo.html:229
 msgid "You two might just be the same person"
 msgstr "Ustedes dos podrían ser la misma persona"
 
-#: templates/wrappedDuo.html:201
+#: templates/wrappedDuo.html:265
 msgid "LOVELY<br>vibes"
 msgstr "HERMOSAS<br>vibras"
 
-#: templates/wrappedDuo.html:204
+#: templates/wrappedDuo.html:268
 msgid "COOL<br>vibes"
 msgstr "BUENAS<br>vibras"
 
-#: templates/wrappedDuo.html:211
+#: templates/wrappedDuo.html:275
 msgid "DUO"
 msgstr "DÚO"
 
-#: templates/wrappedDuo.html:212
+#: templates/wrappedDuo.html:276
 msgid "PLAYLIST"
 msgstr "LISTA DE REPRODUCCIÓN"
 
-#: templates/wrappedDuo.html:217
+#: templates/wrappedDuo.html:293
 msgid "Duo Playlist"
 msgstr "Lista de dúos"
 
 #: templates/wrappedInvite.html:7 templates/wrappedInvite.html:8
-#: templates/wrappedInvite.html:9 templates/wrappedInvite.html:116
+#: templates/wrappedInvite.html:9 templates/wrappedInvite.html:175
 msgid "DuoWrapped Invite"
 msgstr "Invitación DuoWrapped"
 
-#: templates/wrappedInvite.html:118
+#: templates/wrappedInvite.html:177
 msgid "Click here to link your friend’s Spotify!"
 msgstr "¡Haz clic aquí para vincular el Spotify de tu amigo!"
 
-#: templates/wrappedInvite.html:122
+#: templates/wrappedInvite.html:181
 msgid "Link Spotify"
 msgstr "Enlace Spotify"
 
-#: templates/wrappedInvite.html:126
+#: templates/wrappedInvite.html:185
 msgid ""
 "Invite your friends to measure your compatibility from tracks, artists, and "
 "genres from DuoWrapped!"
@@ -457,62 +459,26 @@ msgstr ""
 
 #: templates/wrappedSelect.html:7 templates/wrappedSelect.html:8
 #: templates/wrappedSelect.html:9 templates/wrappedSelect.html:10
-#: templates/wrappedSelect.html:120
+#: templates/wrappedSelect.html:179
 msgid "Welcome"
 msgstr "Bienvenido"
 
-#: templates/wrappedSelect.html:120
+#: templates/wrappedSelect.html:179
 msgid "see your Wrapped from"
 msgstr "ver tu Wrapped desde de"
 
-#: templates/wrappedSelect.html:127
+#: templates/wrappedSelect.html:186
 msgid "[Select]"
-msgstr ""
+msgstr "[Seleccionar]"
 
-#: templates/wrappedSelect.html:131
+#: templates/wrappedSelect.html:190
 msgid "Last Month"
 msgstr "El ultimo mes"
 
-#: templates/wrappedSelect.html:134
+#: templates/wrappedSelect.html:193
 msgid "The Last 6 Months"
 msgstr "Los últimos 6 meses"
 
-#: templates/wrappedSelect.html:137
+#: templates/wrappedSelect.html:196
 msgid "Last Year"
 msgstr "El año pasado"
-
-#~ msgid "January"
-#~ msgstr "Enero"
-
-#~ msgid "February"
-#~ msgstr "Febrero"
-
-#~ msgid "March"
-#~ msgstr "Marzo"
-
-#~ msgid "April"
-#~ msgstr "Abril"
-
-#~ msgid "May"
-#~ msgstr "Mayo"
-
-#~ msgid "June"
-#~ msgstr "Junio"
-
-#~ msgid "July"
-#~ msgstr "Julio"
-
-#~ msgid "August"
-#~ msgstr "Agosto"
-
-#~ msgid "September"
-#~ msgstr "Septiembre"
-
-#~ msgid "October"
-#~ msgstr "Octubre"
-
-#~ msgid "November"
-#~ msgstr "Noviembre"
-
-#~ msgid "December"
-#~ msgstr "Diciembre"
