@@ -17,14 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from django.conf.urls.i18n import i18n_patterns, set_language
 
 from . import views
 
+# Main urlpatterns for non-language-specific URLs (e.g., admin)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/auth/login/', permanent=False)),
-    path('auth/', include('auth.urls')),
+    path('i18n/setlang/', set_language, name='set_language'),
+]
+
+# Language-specific URLs using i18n_patterns
+urlpatterns += i18n_patterns(
+    path('auth/', include('auth.urls')),  # Auth URLs with language prefix
     path('spotify/login/', views.spotify_login, name='spotify_login'),
     path('callback/', views.spotify_callback, name='spotify_callback'),
-    path('wrapped/', include('wrapped.urls')),
-]
+    path('wrapped/', include('wrapped.urls')),  # Wrapped URLs with language prefix
+)

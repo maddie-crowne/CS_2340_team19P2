@@ -61,11 +61,13 @@ def user_login(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
             login(request, user)
             return redirect('wrapped:user_spotify_login')  # Redirect to the login with Spotify page
         else:
-            messages.error(request, "Invalid username or password")
+            messages.error(request, "Oops! Either the password or email is incorrect. Please try again.")
+
     return render(request, 'login.html')
 
 # Logout view
